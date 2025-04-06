@@ -19,5 +19,5 @@ PopcornPal offers an intuitive interface to discover, organize, and interact wit
     - Movies and TV shows are categorized by genres (e.g., Action, Drama, Comedy).
     - Users can filter movies and shows by genre
 - Track TV show episodes
-- Responsive frontend (optional React)
+- Responsive frontend
 
