@@ -6,4 +6,4 @@ const schema = new Schema({
     passwordHash: {type: String, required: true },    
 }, { timestamps: true });
 
-export const Listing = model("User", schema,"users");
+export const User = model("User", schema,"users");
