@@ -2,25 +2,32 @@ import express from "express";
 import {WatchlistItem} from "../models/watchlistItem.model"
 import { authenticate } from "../middleware/authenticate";
 import mongoose from "mongoose";
-import cookieParser from "cookie-parser";
 
 export const router = express.Router();
 
 router.get("/",authenticate, async (req, res) => {
-    const { search } = req.query;
+    const {search} = req.query;
+    const searchStr = search?.toString() ?? "";   
     const userId = req.signedCookies.userId;
+    const isValidId = mongoose.Types.ObjectId.isValid(searchStr);
+    
+    const conditions = [];
+    if (searchStr) {
+        conditions.push({ itemTitle: new RegExp(search?.toString() ?? "", "gi") });
+        conditions.push({ status: new RegExp(search?.toString() ?? "", "gi") });
+        if (isValidId) {
+            conditions.push({ itemId: new mongoose.Types.ObjectId(searchStr) });
+        }
+    }
 
     try{
-        const wlItems = await WatchlistItem.find(
-            {
-                $or: [
-                    { itemTitle: new RegExp(search?.toString() ?? "", "gi") },                    
-                    { itemId: search },
-                ],
-                user: userId
-            },
-            { _id: true, itemTitle: true, itemId: true, status: true }
-        );        
+        const wlItems = await WatchlistItem.find({
+            userId: userId, 
+            ...(conditions.length ? { $or: conditions } : {})           
+          },
+         { _id: true, itemTitle: true, itemId: true, status: true }
+        );       
+        
         res.json(wlItems);
     } catch(error) {
         console.error(`Couldnt do the query: ${search} in DB.`,error);
@@ -81,12 +88,7 @@ router.put("/:id",authenticate, async (req, res) => {
             res.send(`Couldnt put wlItem id: ${id}.`);
         }
     }else{
-        const newWLItem = new WatchlistItem({            
-            itemId: body.itemId,
-            itemTitle: body.itemTitle,
-            userId: req.signedCookies.userId,
-            status: body.status
-        });
+        const newWLItem = new WatchlistItem({...body});
         console.log(newWLItem);
          try{
              await newWLItem.save();

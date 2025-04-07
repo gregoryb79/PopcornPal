@@ -8,18 +8,23 @@ export const router = express.Router();
 
 router.get("/", authenticate, async (req, res) => {
     const {search} = req.query;
+    const searchStr = search?.toString() ?? "";   
     const userId = req.signedCookies.userId;
+    const isValidId = mongoose.Types.ObjectId.isValid(searchStr);
+    
+    const conditions = [];
+    if (searchStr) {
+        conditions.push({ itemTitle: new RegExp(search?.toString() ?? "", "gi") });
+        if (isValidId) {
+          conditions.push({ itemId: new mongoose.Types.ObjectId(searchStr) });
+        }
+      }
 
     if (search){
         try{
             const reviews = await Review.find(
-                {                   
-                    $or: [
-                        { itemTitle: new RegExp(search?.toString() ?? "", "gi") },
-                        { itemId : search },
-                    ], 
-                },
-                { _id: true, itemTitle: true, content: true}
+                conditions.length ? { $or: conditions } : {},
+                { _id: true, itemTitle: true, content: true }              
             );        
             res.json(reviews);
         } catch(error) {
@@ -49,15 +54,15 @@ router.get("/:id",authenticate, async (req, res) => {
 
     try{
         console.log(`getting Review id= ${id}`);        
-        const raiting = await Review.findById(id);       
-        if (!raiting) {
+        const review = await Review.findById(id);       
+        if (!review) {
             console.log(`Review id : ${id} is not in DB.`);
             res.status(404);
             res.send(`Review id : ${id} is not in DB.`);            
             return;
         }       
 
-        res.json(raiting);
+        res.json(review);
     }catch (error) {
         console.error(`Couldnt look for Review id: ${id} in DB.`,error);
 
@@ -90,12 +95,7 @@ router.put("/:id",authenticate, async (req, res) => {
             res.send(`Couldnt put Review id: ${id}.`);
         }
     }else{
-        const newReview = new Review({
-            itemId: body.itemId,
-            itemTitle: body.itemTitle,
-            userId: req.signedCookies.userId,
-            content: body.content
-        });
+        const newReview = new Review({...body});
         console.log(newReview);
          try{
              await newReview.save();

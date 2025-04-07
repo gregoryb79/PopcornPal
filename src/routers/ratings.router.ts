@@ -6,19 +6,21 @@ import { authenticate } from "../middleware/authenticate";
 export const router = express.Router();
 
 
-router.get("/", authenticate, async (req, res) => {
-    const {itemId} = req.query;
+router.get("/", async (req, res) => {
+    const itemId = req.query.search;
     const userId = req.signedCookies.userId;
+
+    console.log(`itemId for ratings is ${itemId}`);
 
     if (itemId){
         try{
-            const raitings = await Rating.find(
+            const ratings = await Rating.find(
                 {                   
                     itemId: itemId
                 },
                 { _id: true, itemTitle: true, score: true}
             );        
-            res.json(raitings);
+            res.json(ratings);
         } catch(error) {
             console.error(`Couldnt find raitings for : ${itemId} in DB.`,error);
             res.status(500);
@@ -45,12 +47,12 @@ router.get("/:id",authenticate, async (req, res) => {
     const { id } = req.params;    
 
     try{
-        console.log(`getting reting id= ${id}`);        
+        console.log(`getting rating id= ${id}`);        
         const raiting = await Rating.findById(id);       
         if (!raiting) {
-            console.log(`raiting id : ${id} is not in DB.`);
+            console.log(`rating id : ${id} is not in DB.`);
             res.status(404);
-            res.send(`raiting id : ${id} is not in DB.`);            
+            res.send(`rating id : ${id} is not in DB.`);            
             return;
         }
         if (raiting.userId != req.signedCookies.userId){
@@ -93,12 +95,7 @@ router.put("/:id",authenticate, async (req, res) => {
             res.send(`Couldnt put Rating id: ${id}.`);
         }
     }else{
-        const newRating = new Rating({
-            itemId: body.itemId,
-            itemTitle: body.itemTitle,
-            userId: req.signedCookies.userId,
-            score: body.score
-        });
+        const newRating = new Rating({...body});
         console.log(newRating);
          try{
              await newRating.save();

@@ -70,10 +70,7 @@ router.put("/:id", async (req, res) => {
           res.send(`Couldnt put Episode id: ${id}.`);
       }
   }else{
-      const newItem = new Episode({
-          title: body.title,
-          body          
-      });
+      const newItem = new Episode({...body});
       console.log(newItem);
        try{
            await newItem.save();
