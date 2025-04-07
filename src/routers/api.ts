@@ -7,9 +7,9 @@ import { router as watchlistRouter } from "./watchlist.router";
 
 export const router = express.Router();
 
-router.get("/hello", (_, res) => {
-    res.json({ message: "Hello World!" });
-});
+// router.get("/hello", (_, res) => {
+//     res.json({ message: "Hello World!" });
+// });
 
 router.use("/items", itemsRouter);
 router.use("/episodes", episodesRouter);

@@ -130,6 +130,11 @@ main {
 }
 
 .itemsList{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    // background-color: red;
    
 }
 

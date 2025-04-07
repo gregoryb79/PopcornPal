@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
                   { cast: new RegExp(search?.toString() ?? "", "gi") },
               ],              
           },
-          { _id: true, title: true, createdAt: true }
+          { _id: true, title: true, releaseDate: true, posterUrl : true }
       );        
       res.json(items);
   } catch(error) {

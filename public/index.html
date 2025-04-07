@@ -25,7 +25,7 @@
         </section>
         <nav class="navMenu u-margin-right-8">
             <li><a href="/">Home</a></li>
-            <li><a href="/">Watchlist</a></li>
+            <li><a href="/">My Watchlist</a></li>
             <li><a href="/">My Ratings</a></li>
             <li><a href="/">My Reviews</a></li>
         </nav>                     
@@ -43,9 +43,9 @@
               </select>
         </section>
        
-        <ul id="itemsList">
+        <ul id="itemsList" class="itemsList">
             <!-- all the movies and series are populated here -->
-            <li class="itemCard">
+            <!-- <li class="itemCard">
                 <img src="https://m.media-amazon.com/images/I/51NiGlapXlL._AC_SY679_.jpg" alt="poster image"></img>
                 <h4>The Shawshank Redemption</h4>
                 <p class="releaseYear">1994</p>
@@ -56,14 +56,15 @@
                         <span class="checkmark"></span>
                       </label>
                 </section>               
-            </li>
+            </li> -->
         </ul>
     </main>
 
     <script type="module">
-        import { initApp } from "./index.js";
+        import { index } from "./views.js";
 
-        initApp(document.getElementById("app"));
+        index(document.getElementById("itemsList"),document.forms["searchForm"]);
+
     </script>
 </body>
 

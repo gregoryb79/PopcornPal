@@ -113,6 +113,7 @@ app.post("/register", async (req, res) => {
 
 app.use("/api", apiRouter);
 app.use(express.static(path.resolve(__dirname, "..", "public")));
-app.use((_, res) => {
+app.use((req, res) => {
+    console.log((new Date()).toLocaleString(), req.method, req.url);
     res.redirect("404.html");
 });

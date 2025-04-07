@@ -20,7 +20,15 @@ router.get("/", async (req, res) => {
                 },
                 { _id: true, itemTitle: true, score: true}
             );        
-            res.json(ratings);
+            if(ratings.length > 0){
+                console.log(`Found ratings: ${JSON.stringify(ratings)}`);
+                res.json(ratings);
+            }else{
+                console.log(`No ratings found for itemId: ${itemId}`);
+                res.status(500);
+                res.send(`Couldnt find raitings for : ${itemId} in DB.`);
+            }
+            
         } catch(error) {
             console.error(`Couldnt find raitings for : ${itemId} in DB.`,error);
             res.status(500);
@@ -28,13 +36,18 @@ router.get("/", async (req, res) => {
         } 
     }else{
         try{
-            const raitings = await Rating.find(
+            const ratings = await Rating.find(
                 {                   
                     userId: userId
                 },
                 { _id: true, itemId: true, itemTitle: true, score: true}
-            );        
-            res.json(raitings);
+            );      
+            if(ratings.length > 0){
+                res.json(ratings);
+            }else{
+                res.status(500);
+                res.send(`Couldnt find raitings for : ${itemId} in DB.`);
+            }              
         } catch(error) {
             console.error(`Couldnt find raitings by : ${userId} in DB.`,error);
             res.status(500);
