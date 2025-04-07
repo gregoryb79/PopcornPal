@@ -88,6 +88,10 @@ main {
     margin-right: 0.5rem;
 }
 
+.u-border-radius-8{
+    border-radius: 0.5rem;
+}
+
 .mainSubHeader{
     display: flex;
     justify-content: space-between;
@@ -132,8 +136,11 @@ main {
 .itemsList{
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-left: auto;
+    margin-right: auto;
     // background-color: red;
    
 }
@@ -157,7 +164,7 @@ main {
         margin-top: 0.25rem;
         border-radius: 0.5rem;
     }  
-    
+        
     p{
         font-size: var(--itemTextFont);
         color: var(--text_color_secondary);
@@ -175,3 +182,5 @@ main {
      
 
 }
+
+
