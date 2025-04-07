@@ -10,8 +10,54 @@
 </head>
 
 <body>
-    <main>
-        <pre id="app"></pre>
+    <header class="u-margin-top-8">
+        <section class="logoANDsearch u-margin-right-8 u-marginLeft-8">
+            <h2>
+                PopcornPal 🍿 
+            </h2>
+            <form name="searchForm" class="searchForm">
+                <input type="search" name="search" placeholder="Search..." />
+                <button type="submit">Search</button>
+            </form> 
+            <div id="userIcon" class="icon">
+                L
+            </div>
+        </section>
+        <nav class="navMenu u-margin-right-8">
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Watchlist</a></li>
+            <li><a href="/">My Ratings</a></li>
+            <li><a href="/">My Reviews</a></li>
+        </nav>                     
+    </header>
+
+    <main class="u-margin-bottom-16">
+        <section class="mainSubHeader u-margin-right-8 u-marginLeft-8">
+            <h2>
+                What to watch
+            </h2>
+            <select id="sortingOptions" name="sortingOptions" class="sortingSelector">
+                <option value="Newest">Newest</option>
+                <option value="Oldest">Oldest</option>
+                <option value="Top Rated">Top Rated</option>
+              </select>
+        </section>
+       
+        <ul id="itemsList">
+            <!-- all the movies and series are populated here -->
+            <li class="itemCard">
+                <img src="https://m.media-amazon.com/images/I/51NiGlapXlL._AC_SY679_.jpg" alt="poster image"></img>
+                <h4>The Shawshank Redemption</h4>
+                <p class="releaseYear">1994</p>
+                <section class="raitingANDlist">
+                    <p class="raiting">5.0</p>
+                    <label class="myListcontainer">
+                        <input type="checkbox" class="checkbox">
+                        <span class="checkmark"></span>
+                      </label>
+                </section>               
+            </li>
+        </ul>
     </main>
 
     <script type="module">

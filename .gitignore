@@ -140,3 +140,6 @@ dist
 
 *.css
 *.css.map
+
+#helper data directory
+data/
