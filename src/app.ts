@@ -19,7 +19,9 @@ const hashKey = process.env.HASH_SECRET || "defaultKey";
 
 
 app.all("/login", (req, res, next) => {
-    if (req.signedCookies.userId) {
+    const userId = req.signedCookies.userId;
+    if (userId) {
+        console.log(`User ${userId} already logged in`);
         res.redirect("/");
         return;
     }
@@ -29,6 +31,8 @@ app.all("/login", (req, res, next) => {
 
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
+
+    console.log("Starting login");
 
     const credentials  = await User.find({email: email},
         {email: true,
@@ -68,6 +72,8 @@ app.get("/logout", async (req, res) => {
 
 app.post("/register", async (req, res) => {
     const { email, password, username } = req.body;
+
+    console.log("Starting register");
 
     const users  = await User.find({email: email},{email: true});
     if (users.length > 0){

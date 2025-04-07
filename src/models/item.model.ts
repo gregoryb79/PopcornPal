@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 const itemSchema = new Schema({
   title: { type: String, required: true },
   type: { type: String, enum: ["Movie", "Show"], required: true },
-  releaseDate: { type: Date, required: true },
+  releaseDate: { type: String, required: true },
   posterUrl: { type: String },
   description: { type: String },
   genres: [{ type: String }],
