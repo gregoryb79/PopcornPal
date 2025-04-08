@@ -1,28 +1,88 @@
-import { getItems } from './model'; 
-// Import 'node-fetch' as a module
-import fetch, { Response } from 'node-fetch';
+import { getItems } from "../public/model";
 
-// Mock the 'fetch' function before tests
-jest.mock('node-fetch', () => ({
-  default: jest.fn(),
-  Response: jest.requireActual('node-fetch').Response, // Preserve actual Response
-}));
+global.fetch = jest.fn();
 
-// Now you can mock the behavior of fetch in your tests
-const mockFetch = fetch as jest.Mock;
+describe("getItems", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-test('fetches and sorts items correctly on success', async () => {
-  const mockResponse = [
-    { id: 2, title: 'Item B' },
-    { id: 1, title: 'Item A' },
-  ];
+  it("should fetch items and return them sorted by releaseDate in descending order", async () => {
+    const mockItems = [
+      { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
+      { _id: "2", title: "Item 2", releaseDate: "2023-02-01" },
+    ];
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockItems,
+    });
 
-  // Mock fetch to return a resolved promise with the mockResponse
-  mockFetch.mockResolvedValueOnce(new Response(JSON.stringify(mockResponse)));
+    const result = await getItems("?type=Movie");
+    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+    expect(result).toEqual([
+      { _id: "2", title: "Item 2", releaseDate: "2023-02-01" },
+      { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
+    ]);
+  });
 
-  const result = await getItems(""); // Call your function that uses fetch
+  it("should throw an error if the fetch response is not ok", async () => {
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      text: async () => "Internal Server Error",
+    });
 
-  expect(result).toEqual(mockResponse);
-  expect(mockFetch).toHaveBeenCalledTimes(1);
-  // Additional assertions based on your logic
+    await expect(getItems("?type=Movie")).rejects.toThrow(
+      "Failed to fetch notes. Status: 500. Message: Internal Server Error"
+    );
+    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+  });
+
+  it("should throw an error if fetch itself fails", async () => {
+    (fetch as jest.Mock).mockRejectedValueOnce(new Error("Network Error"));
+
+    await expect(getItems("?type=Movie")).rejects.toThrow("Network Error");
+    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+  });
+
+  it("should return an empty array if the API returns no items", async () => {
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => [],
+    });
+
+    const result = await getItems("?type=Movie");
+    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+    expect(result).toEqual([]);
+  });
+
+  it("should handle items with missing releaseDate gracefully", async () => {
+    const mockItems = [
+      { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
+      { _id: "2", title: "Item 2" }, // Missing releaseDate
+    ];
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockItems,
+    });
+
+    const result = await getItems("?type=Movie");
+    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+    expect(result).toEqual([
+      { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
+      { _id: "2", title: "Item 2" },
+    ]);
+  });
+
+  it("should handle invalid JSON response gracefully", async () => {
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => {
+        throw new Error("Invalid JSON");
+      },
+    });
+
+    await expect(getItems("?type=Movie")).rejects.toThrow("Invalid JSON");
+    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+  });
 });
