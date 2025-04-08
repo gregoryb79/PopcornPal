@@ -1,7 +1,9 @@
-import { doRegister } from "./model.js";
+import { doRegister as defaultDoRegister } from "./model";
 
-
-export async function onRegisterFormSubmit(formData: FormData) : Promise<boolean> {
+export async function onRegisterFormSubmit(
+  formData: FormData,
+  doRegister: (user: { email: string; password: string; username: string }) => Promise<void> = defaultDoRegister // Default to the real function
+): Promise<boolean> {
 
     const rawData = Object.fromEntries(formData);  
     console.log(`register form submitted, email: ${rawData.email},\n

@@ -1,6 +1,9 @@
-import { doLogIn } from "./model.js";
+import { doLogIn as defaultDoLogIn } from "./model";
 
-export async function onLoginFormSubmit(formData: FormData) : Promise<boolean> {
+export async function onLoginFormSubmit(
+  formData: FormData,
+  doLogIn: (email: string, password: string) => Promise<void> = defaultDoLogIn // Default to the real function for testing
+): Promise<boolean> {
 
     const rawData = Object.fromEntries(formData);  
     console.log(`login form submitted, email: ${rawData.email}, password: ${rawData.password}`);
@@ -8,6 +11,7 @@ export async function onLoginFormSubmit(formData: FormData) : Promise<boolean> {
     if(!rawData.email){
         throw new Error("email can't be empty"); 
     }
+    console.log(typeof rawData.email);
     if (typeof rawData.email !== "string"){
         throw new Error("email must be a string");
     }
