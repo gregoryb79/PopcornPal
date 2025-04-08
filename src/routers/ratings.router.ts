@@ -108,7 +108,7 @@ router.put("/:id",authenticate, async (req, res) => {
             res.send(`Couldnt put Rating id: ${id}.`);
         }
     }else{
-        const newRating = new Rating({...body});
+        const newRating = new Rating({...body, userId : req.signedCookies.userId});
         console.log(newRating);
          try{
              await newRating.save();

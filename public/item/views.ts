@@ -1,59 +1,54 @@
-import { Item, getItem, getRatingbyID, getReviewsbyID, returnedReview } from "../model.js";
+import { Item, getItem, getRatingbyID, getReviewsbyID, returnedReview,
+    getRatingbyUserID, getWatchlistStatus,
+    setwlStatus, setRating } from "../model.js";
 
 export async function index(
-    itemTitle: HTMLElement,itemSection: HTMLElement,reviewsSection: HTMLElement,
-    reviewsList: HTMLElement, myRatingForm: HTMLFormElement, wlOptionsForm: HTMLFormElement) {
+    itemTitle: HTMLElement,itemDetails: HTMLElement,reviewsSection: HTMLElement,
+    reviewsList: HTMLElement, myRatingSelector: HTMLSelectElement, wlOptionsSelector: HTMLSelectElement) {
     
     const itemId = window.location.hash.substring(1); 
     const item = await getItem(itemId);  
+    const usersRating = await getRatingbyID (itemId);
+    console.log(`usersRating = ${usersRating}`);
+    const reviews: returnedReview[] = await getReviewsbyID (itemId); 
+    console.log(`reviews = ${reviews}`);
+    const myRaiting = await getRatingbyUserID (itemId);
+    console.log(`myRaiting = ${myRaiting}`);    
+    const myWatchlistStatus = await getWatchlistStatus (itemId);
+    console.log(`myWatchlistStatus = ${myWatchlistStatus}`);
 
     if(item){
-        const usersRating = await getRatingbyID (itemId);
-        const reviews = await getReviewsbyID (itemId); 
-        const myRaiting = await getRatingbyUserID (itemId);
-        const myWatchlistStatus = await getWatchlistStatus (itemId);
-        renderPage(item,usersRating,reviews);
+        renderItemOnPage(item,usersRating);
+        console.log("done rendering item on page");
+        renderReviews(reviews);
+        console.log("done rendering reviews");
+
+        myRatingSelector.value = myRaiting ? myRaiting.score.toString() : "none";
+        wlOptionsSelector.value = myWatchlistStatus;
+
     }else{
-        itemSection.innerHTML = "<h3>Oops, something went wrong, please retry...</h3>";
-    }   
-
+        itemDetails.innerHTML = "<h3>Oops, something went wrong, please retry...</h3>";
+    }     
     
-    const myRatingSelector = myRatingForm.querySelector<HTMLSelectElement>("#myRaiting");
-    if (myRatingSelector) {
-        myRatingSelector.addEventListener("change", (event) => {
-            const selectedRating = (event.target as HTMLSelectElement).value;
-            console.log("My Rating selected:", selectedRating);
-        });
-    }
-
-    // Handle watchlist status selection
-    const wlOptionsSelector = wlOptionsForm.querySelector<HTMLSelectElement>("#wlOptions");
-    if (wlOptionsSelector) {
-        wlOptionsSelector.addEventListener("change", (event) => {
-            const selectedStatus = (event.target as HTMLSelectElement).value;
-            console.log("Watchlist Status selected:", selectedStatus);
-        });
-    }
-
-    // Display reviews
-    const reviews = Array.from(reviewsList.querySelectorAll(".reviewCard"));
-    reviews.forEach((review, index) => {
-        console.log(`Review ${index + 1}:`, review.textContent);
+    myRatingSelector.addEventListener("change", async (event) => {
+        const rating = (event.target as HTMLSelectElement).value;        
+        console.log(`rating = ${rating}`);
+        if (myRaiting){
+            console.log(`rating already exists, updating it`);
+            await setRating(item, rating, myRaiting._id);
+        } else{
+            console.log(`rating does not exist, creating it`);  
+            await setRating(item, rating);
+        }
     });
 
-    // Example of adding a new review dynamically
-    const addReview = (reviewText: string) => {
-        const newReview = document.createElement("li");
-        newReview.className = "reviewCard";
-        newReview.textContent = reviewText;
-        reviewsList.appendChild(newReview);
-        console.log("New review added:", reviewText);
-    };
+    // wlOptionsSelector.addEventListener("change", async (event) => {
+    //     const wlStatus = (event.target as HTMLSelectElement).value;        
+    //     console.log(`rating = ${wlStatus}`);
+    //     await setwlStatus(itemId, wlStatus);
+    // });
 
-    // Example usage of adding a review
-    addReview("This is a dynamically added review.");
-
-    function renderPage(item : Item, usersRating : number, reviews : returnedReview[]) {
+    function renderItemOnPage(item : Item, usersRating : number) {
         
         itemTitle.innerHTML=`
             <h2>
@@ -64,8 +59,7 @@ export async function index(
             </p>
         `;
 
-        itemSection.innerHTML=`
-            <div class="itemDetails">                                 
+        itemDetails.innerHTML=`                                             
                 <img src="${item.posterUrl ? item.posterUrl : "../placeholder_poster.jpg"}" alt="item poster image">         
                 <section class="itemDescription">
                     <h4>Director: ${item.director ? item.director : "" }</h4>                    
@@ -73,32 +67,12 @@ export async function index(
                     <h4>Description:</h4>
                     <p>${item.description ? item.description : ""}</p>                                   
                     <h4>Users rating: ${usersRating.toFixed(1)}</h4>                    
-                </section>                
-            </div>
-            <section class="selectorsSection">
-                <div>
-                    <label for="myRaiting">My Rating:</label>
-                     <select id="myRaiting" name="myRaiting" class="myRaitingSelector">
-                    <option value="none">none</option>                        
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                </div>     
-                <div>
-                    <label for="wlOptions">Watchlist Status:</label>
-                    <select id="wlOptions" name="wlOptions" class="wlOptionsSelector">
-                        <option value="none">none</option>
-                        <option value="Plan to Watch">Plan to Watch</option>
-                        <option value="Watching">Watching</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Dropped">Dropped</option>
-                    </select>
-                </div>          
-            </section>`;     
+                </section>`;             
 
+        console.log("Page rendered successfully");
+    }
+
+    function renderReviews(reviews : returnedReview[]) {
         reviewsSection.innerHTML=`                       
             <h2>Reviews</h2>
             <ul id="reviewsList" class="reviewsList"> 
@@ -106,7 +80,6 @@ export async function index(
                     <li class="reviewCard">${review.content}</li>
                     `).join("\n")}      
             </ul>`;
-
-
+        console.log("Reviews rendered successfully");
     }
 }
