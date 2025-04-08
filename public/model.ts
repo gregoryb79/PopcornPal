@@ -1,4 +1,4 @@
-type Item = {
+export type Item = {
     _id: string,
     title: string;
     type: "Movie" | "Show";
@@ -20,6 +20,16 @@ type Rating = {
     itemId: string; 
     itemTitle: string;
     score: number;
+    createdAt?: string; 
+    updatedAt?: string; 
+}
+
+export type Review = {
+    _id: string;
+    userId: string; 
+    itemId: string; 
+    itemTitle: string;
+    content: string;    
     createdAt?: string; 
     updatedAt?: string; 
 }
@@ -85,4 +95,37 @@ export async function getRatings(
   }
 
   return ratingMap;
+}
+
+export async function getItem(itemId:string) {
+  console.log(`getItem with itemId = ${itemId} starts`);
+  try {        
+      const res = await fetch(`/api/items/${itemId}`);
+      if (!res.ok) {
+          const message = await res.text();             
+          throw new Error(`Failed to fetch item. Status: ${res.status}. Message: ${message}`);
+      }       
+      const item: Item =  await res.json();
+      return item;        
+  }catch (error) {
+      console.error("Error fetching item:", error);
+      throw error; 
+  }     
+}
+
+export type returnedReview = Omit<Review,"userId"|"itemId"|"createdAt"|"updatedAt">
+export async function getReviewsbyID(itemID: string) : Promise<returnedReview[]>{
+    console.log(`getReviewsbyID with itemID = ${itemID} starts`);
+    try {
+        const res = await fetch(`/api/reviews?search=${itemID}`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch reviews for ${itemID}. Status: ${res.status}. Message: ${message}`);
+        }       
+        const reviews : returnedReview [] =  await res.json();        
+        return reviews;        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return [];        
+    } 
 }

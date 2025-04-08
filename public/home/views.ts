@@ -1,4 +1,4 @@
-import {getItems, getRatings} from "./model.js"
+import {getItems, getRatings} from "../model.js"
 
 export function index(itemsList : HTMLElement, searchForm : HTMLFormElement){
 
@@ -9,24 +9,22 @@ export function index(itemsList : HTMLElement, searchForm : HTMLFormElement){
     itemsList.addEventListener("click", (event) => {
         const target = event.target as HTMLElement;
 
-        // Find the closest <li> with class 'itemCard'
         const listItem = target.closest("li.itemCard");
-        if (!listItem) return; // Just in case the click was outside a list item
+        if (!listItem) return; 
     
         const itemId = listItem.getAttribute("data-id");
     
-        // Check if it was a checkbox
         if (target.matches('input[type="checkbox"]')) {
             const checkbox = target as HTMLInputElement;
-            console.log(`Checkbox clicked in item ${itemId}, checked: ${checkbox.checked}`);
-            alert("Please Log in to use all the functionality.");
+            console.log(`Checkbox clicked in item ${itemId}, checked: ${checkbox.checked}`);            
         }
-        // Check if it was an image
+        
         else if (target.tagName === "IMG") {
-            console.log(`Image clicked in item ${itemId}`);
-            alert("Please Log in to use all the functionality.");
+            console.log(`Image clicked in item ${itemId}`); 
+            window.location.replace(`/item#${itemId}`);
+
         }
-        // Optional: handle other elements if needed
+        
     });
 
 
@@ -54,12 +52,7 @@ export function index(itemsList : HTMLElement, searchForm : HTMLFormElement){
             itemsList.innerHTML = "<h3>No results for your search...</h3>"
         }else{
             itemsList.innerHTML = "<h3>Oops, something went wrong, please retry...</h3>"
-        }
-
-        const checkboxes = document.querySelectorAll('#itemsList input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
-        checkboxes.forEach(checkbox => {
-            checkbox.disabled = true;
-        });
+        }        
         
     }catch(error){
         console.error(error);

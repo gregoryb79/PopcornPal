@@ -1,4 +1,4 @@
-import { doLogIn as defaultDoLogIn } from "./model";
+import { doLogIn as defaultDoLogIn } from "./model.js";
 
 export async function onLoginFormSubmit(
   formData: FormData,

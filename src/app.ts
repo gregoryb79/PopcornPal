@@ -22,7 +22,8 @@ app.use((req, res, next) => {
 
     if (req.url.startsWith("/home") || 
         req.url.startsWith("/raitings") || 
-        req.url.startsWith("/reviews") || 
+        req.url.startsWith("/reviews") ||
+        req.url.startsWith("/item") || 
         req.url.startsWith("/watchlist")) {
         if (!userId) {
             console.log(`Unauthorized access attempt to ${req.url}`);

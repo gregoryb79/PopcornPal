@@ -1,4 +1,4 @@
-import { getRatingbyID } from "./model";
+import { getRatingbyID } from "../model";
 
 global.fetch = jest.fn();
 

@@ -231,17 +231,63 @@ main {
 
     input{
         width: max(50%,15rem);
-    }
-    
-    // & > * {
-    //     margin-left: 0.5rem;
-    //     margin-right: 0.5rem;
-    // }
-
-    // &:last-child{
-    //     align-items: center;
-    // }
-    
+    }   
 }
+
+.itemTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+.itemSection{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+
+    img{
+        width: clamp(16rem, 40%, 40%);
+        // height: auto;        
+    }
+
+    .itemDetails{
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        flex-wrap: wrap;        
+    }
+
+    .itemDescription{
+        max-width: 50%;
+    }   
+    
+    .selectorsSection{
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;                
+        flex-wrap: wrap;
+    }
+}
+
+.reviewsSection{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;   
+
+    .reviewsList{
+        display: flex;
+        flex-direction: column;        
+        gap: 0.5rem;        
+    }
+
+    .reviewCard{
+        box-shadow: 10px 10px 15px var(--shadow-color,grey);
+        border-radius: 0.5rem;
+    }
+}
+
 
 

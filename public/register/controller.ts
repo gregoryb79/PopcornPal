@@ -1,4 +1,4 @@
-import { doRegister as defaultDoRegister } from "./model";
+import { doRegister as defaultDoRegister } from "./model.js";
 
 export async function onRegisterFormSubmit(
   formData: FormData,
