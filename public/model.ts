@@ -124,7 +124,7 @@ export async function getItem(itemId:string) {
   }     
 }
 
-export type returnedReview = Omit<Review,"userId"|"itemId"|"createdAt"|"updatedAt">
+export type returnedReview = Omit<Review,"userId"|"createdAt"|"updatedAt">
 export async function getReviewsbyID(itemID: string) : Promise<returnedReview[]>{
     console.log(`getReviewsbyID with itemID = ${itemID} starts`);
     try {
@@ -170,10 +170,11 @@ export async function getWatchlistStatus(itemID: string) : Promise<returnedWatch
             const message = await res.text();             
             throw new Error(`Failed to fetch watchlist status for ${itemID}. Status: ${res.status}. Message: ${message}`);
         }       
-        const wlStatus = await res.json();
-        console.log(`wlStatus = ${wlStatus}`);
-        if (wlStatus.length > 0) {
-            return wlStatus;
+        const wlItem:returnedWatchlist[] = await res.json();
+        console.log(`wlItem = ${JSON.stringify(wlItem)}`);
+        if (wlItem.length > 0) {
+            console.log(`returning wlItem = ${wlItem[0].status}`);
+            return wlItem[0];
         }else{
             return null;
         }        
@@ -230,5 +231,50 @@ export async function setwlStatus(item: returnedItems, wlStatus: string, wlId : 
         }        
     }catch (error) {
         console.error("Error setting watchlist status:", error);        
+    } 
+}
+
+export async function getReviewbyUserID(itemId : string) : Promise<returnedReview|null>{
+    console.log(`getReviewbyUserID with itemId = ${itemId} starts`);
+    try {
+        const res = await fetch(`/api/reviews`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch reviews for ${itemId}. Status: ${res.status}. Message: ${message}`);
+        }       
+        const reviews : returnedReview [] =  await res.json();
+        if (reviews.length > 0) {
+            return reviews.find(review => review.itemId === itemId) || null;
+        }else{
+            return null;
+        }        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return null;        
+    } 
+}
+
+export async function setReview(item: returnedItems, review: string, reviewId : string = "newReview") : Promise<void>{
+    console.log(`setReview with itemID = ${item._id} and review = ${review} starts`);
+
+    const body = {
+        itemId: item._id,
+        itemTitle: item.title,
+        content: review,};
+
+    try {
+        const res = await fetch(`/api/reviews/${reviewId}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set reviews for ${item._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting reviews:", error);        
     } 
 }

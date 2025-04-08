@@ -73,15 +73,19 @@
             </section>                  
         </section>
 
-        <section class="reviewsSection" id="reviewsSection">            
-            <!-- <h2>Reviews</h2>
+        <section class="reviewsSection" id="reviewsSection">                        
+            <h2>Reviews</h2>
+            <form class="reviewForm" name="reviewForm" id="reviewForm">
+                <textarea id="reviewText" name="reviewText" rows="2" placeholder="Input text..."></textarea> 
+                <button type="submit">Submit</button>
+            </form>
             <ul id="reviewsList" class="reviewsList"> 
+                <!--<li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
                 <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
                 <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
                 <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-            </ul> -->
+                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>-->
+            </ul>
         </section>
     </main>
 
@@ -93,7 +97,8 @@
             document.getElementById("reviewsSection"),
             document.getElementById("reviewsList"),
             document.getElementById("myRaiting"),
-            document.getElementById("wlOptions"));
+            document.getElementById("wlOptions"),
+            document.forms["reviewForm"]);
 
     </script>
 </body>

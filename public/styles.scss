@@ -249,8 +249,8 @@ main {
     width: 90%;
 
     img{
-        width: clamp(16rem, 40%, 40%);
-        // height: auto;        
+        // width: clamp(16rem, 20%, 20%);
+        height: 15rem;        
     }
 
     .itemDetails{
@@ -286,6 +286,11 @@ main {
     .reviewCard{
         box-shadow: 10px 10px 15px var(--shadow-color,grey);
         border-radius: 0.5rem;
+    }
+
+    textarea{
+        width: 100%;      
+        resize: none;
     }
 }
 

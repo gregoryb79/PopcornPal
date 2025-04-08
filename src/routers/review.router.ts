@@ -95,7 +95,7 @@ router.put("/:id",authenticate, async (req, res) => {
             res.send(`Couldnt put Review id: ${id}.`);
         }
     }else{
-        const newReview = new Review({...body});
+        const newReview = new Review( {...body, userId : req.signedCookies.userId});
         console.log(newReview);
          try{
              await newReview.save();

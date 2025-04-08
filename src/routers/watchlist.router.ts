@@ -27,7 +27,7 @@ router.get("/",authenticate, async (req, res) => {
           },
          { _id: true, itemTitle: true, itemId: true, status: true }
         );       
-        
+        console.log(`Found wlItems: ${JSON.stringify(wlItems)}`);
         res.json(wlItems);
     } catch(error) {
         console.error(`Couldnt do the query: ${search} in DB.`,error);
