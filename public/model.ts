@@ -14,6 +14,16 @@ type Item = {
     updatedAt?: string;
   };
 
+type Rating = {
+    _id: string,
+    userId: string; 
+    itemId: string; 
+    itemTitle: string;
+    score: number;
+    createdAt?: string; 
+    updatedAt?: string; 
+}
+
 export type returnedItems = Omit<Item,"type"|"description"|"genres"|"cast"|"director"
                                 |"runtime"|"seasons"|"createdAt"|"updatedAt">;
 export async function getItems(query : string) : Promise<returnedItems[]> {
@@ -32,6 +42,7 @@ export async function getItems(query : string) : Promise<returnedItems[]> {
     }    
 }
 
+export type returnedRating = Omit<Rating,"userId"|"itemId"|"createdAt"|"updatedAt">
 export async function getRatingbyID(itemID: string) : Promise<number>{
     try {
         const res = await fetch(`/api/ratings?search=${itemID}`);
@@ -39,7 +50,7 @@ export async function getRatingbyID(itemID: string) : Promise<number>{
             const message = await res.text();             
             throw new Error(`Failed to fetch raitings for ${itemID}. Status: ${res.status}. Message: ${message}`);
         }       
-        const ratings =  await res.json();
+        const ratings : returnedRating [] =  await res.json();
         if (ratings.length > 0) {
             const averageScore = ratings.reduce((sum, rating) => sum + rating.score, 0) / ratings.length;
             return averageScore;
