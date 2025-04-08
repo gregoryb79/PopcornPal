@@ -1,4 +1,4 @@
-import { getItems } from "../public/model";
+import { getItems } from "./model";
 
 global.fetch = jest.fn();
 

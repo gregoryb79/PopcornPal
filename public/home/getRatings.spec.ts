@@ -1,4 +1,4 @@
-import { getRatings, returnedItems } from "../public/model";
+import { getRatings, returnedItems } from "./model";
 
 describe("getRatings", () => {
   it("should return a map of item IDs to their ratings", async () => {
