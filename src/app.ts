@@ -17,22 +17,39 @@ app.use(json());
 app.use(cookieParser(process.env.SESSION_SECRET));
 const hashKey = process.env.HASH_SECRET || "defaultKey";
 
+app.use((req, res, next) => {
+    const userId = req.signedCookies.userId;   
 
-app.all("/login", (req, res, next) => {
+    if (req.url.startsWith("/home") || 
+        req.url.startsWith("/raitings") || 
+        req.url.startsWith("/reviews") || 
+        req.url.startsWith("/watchlist")) {
+        if (!userId) {
+            console.log(`Unauthorized access attempt to ${req.url}`);
+            res.redirect("/login"); 
+            return;
+        }    
+    }
+    
+    next(); // Proceed to the next middleware or route handler
+});
+
+app.all("/", (req, res, next) => {
     const userId = req.signedCookies.userId;
     if (userId) {
         console.log(`User ${userId} already logged in`);
-        res.redirect("/");
+        res.redirect("/home");
         return;
+    }else{
+        res.redirect("/login");
     }
-
     next();
 });
 
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
-    console.log("Starting login");
+    console.log(`Starting login email = ${email}, password = ${password}`);
 
     const credentials  = await User.find({email: email},
         {email: true,
@@ -75,10 +92,19 @@ app.post("/register", async (req, res) => {
 
     console.log("Starting register");
 
-    const users  = await User.find({email: email},{email: true});
-    if (users.length > 0){
+    const emailCheck  = await User.find({email: email},{email: true});
+    if (emailCheck.length > 0){
         res.status(401);
         res.send(`user with email ${email} already exists.`);
+        console.log(`user with email ${email} already exists.`);
+        return;
+    }
+
+    const usernameCheck  = await User.find({username: username},{username: true});
+    if (usernameCheck.length > 0){
+        res.status(401);
+        res.send(`user with username ${username} already exists.`);
+        console.log(`user with username ${username} already exists.`);
         return;
     }
     

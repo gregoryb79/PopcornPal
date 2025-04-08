@@ -20,6 +20,8 @@
 
     --itemTitleFont: 1rem;
     --itemTextFont: 0.75rem;
+    --defaultFont: 1rem;
+    --largeFont: 1.5rem;
 
 }
 
@@ -32,7 +34,7 @@
 }
 
 html {
-    font-size: calc(1rem + 0.5vw);
+    font-size: var(--defaultFont);
     line-height: 1.5;
 }
 
@@ -41,12 +43,19 @@ body {
     width: min(50rem, 100% - 2rem);
     margin-inline: auto;
     border: 1px solid grey;
+    // min-height: 90vh;
 }
 
 ul, ol, menu, li, nav {
     padding: 0;
     list-style: none;
     
+}
+
+h1{
+    font-size: 3rem;
+    color: var(--text_color_main);
+    text-align: center;
 }
 
 h4{
@@ -65,10 +74,11 @@ textarea {
 }
 
 main {
-    
+        
     display: flex;
     flex-direction: column;
-    gap: 1rem;       
+    gap: 1rem;    
+    min-height: 85vh;   
 }
 
 .u-margin-top-16{
@@ -181,6 +191,57 @@ main {
     }
      
 
+}
+
+.registerMessage{
+    text-align: center;
+}
+
+.loginForm{
+    
+    margin: 15% auto auto auto;
+    border: 1px solid darkgray;    
+    font-size: var(--largeFont);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;           
+    width: max(40vw,17rem);
+
+    section{
+        width: max(35vw,16rem);;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;  
+        flex-wrap: wrap;      
+    }
+    button{
+        width: 50%;
+        height: 3rem;
+        background-color: var(--background_color);
+        color: var(--text_color_main);
+        border-radius: 0.5rem;
+        border: 2px solid var(--text_color_main);
+        cursor: pointer;
+        font-size: var(--largeFont);
+        &:hover{            
+            color: var(--text_color_secondary);
+        }
+    } 
+
+    input{
+        width: max(50%,15rem);
+    }
+    
+    // & > * {
+    //     margin-left: 0.5rem;
+    //     margin-right: 0.5rem;
+    // }
+
+    // &:last-child{
+    //     align-items: center;
+    // }
+    
 }
 
 
