@@ -44,6 +44,7 @@ export async function getItems(query : string) : Promise<returnedItems[]> {
 
 export type returnedRating = Omit<Rating,"userId"|"itemId"|"createdAt"|"updatedAt">
 export async function getRatingbyID(itemID: string) : Promise<number>{
+    console.log(`getRatingbyID with itemID = ${itemID} starts`);
     try {
         const res = await fetch(`/api/ratings?search=${itemID}`);
         if (!res.ok) {
@@ -63,19 +64,25 @@ export async function getRatingbyID(itemID: string) : Promise<number>{
     } 
 }
 
-export async function getRatings (items: returnedItems[]): Promise<Map<string,number>>{
+export async function getRatings(
+  items: returnedItems[],
+  getRatingbyIDFn: (itemID: string) => Promise<number> = getRatingbyID // to allow for mock function injection in tests jest.spyOn and similar didn't work
+): Promise<Map<string, number>> {
+  const ratingMap: Map<string, number> = new Map();
 
-    const ratingMap: Map<string, number> = new Map();
-    for (const item of items){
-        try{
-            const rating = await getRatingbyID(item._id);
-            ratingMap.set(item._id,rating);
-        }catch(error){
-            console.error(`Cant get raitings for id=${item._id}`,error);
-            ratingMap.set(item._id,0);
-        }        
-    }  
-
+  if (items.length === 0) {
     return ratingMap;
+  }
 
+  for (const item of items) {
+    try {
+      const rating = await getRatingbyIDFn(item._id);
+      ratingMap.set(item._id, rating);
+    } catch (error) {
+      console.error(`Failed to fetch rating for item ${item._id}:`, error);
+      ratingMap.set(item._id, 0); 
+    }
+  }
+
+  return ratingMap;
 }

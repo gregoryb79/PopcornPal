@@ -9,19 +9,22 @@ describe("getItems", () => {
 
   it("should fetch items and return them sorted by releaseDate in descending order", async () => {
     const mockItems = [
-      { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
-      { _id: "2", title: "Item 2", releaseDate: "2023-02-01" },
+      { _id: "1", title: "Item 1", releaseDate: "2023-01-01", posterUrl: "url1"},
+      { _id: "2", title: "Item 2", releaseDate: "2023-02-01", posterUrl: "url2"},
+      { _id: "3", title: "Item 3", releaseDate: "2022-12-01", posterUrl: "url3"},
+
     ];
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: async () => mockItems,
     });
 
-    const result = await getItems("?type=Movie");
-    expect(fetch).toHaveBeenCalledWith("/api/items?type=Movie");
+    const result = await getItems("");
+    expect(fetch).toHaveBeenCalledWith("/api/items");
     expect(result).toEqual([
-      { _id: "2", title: "Item 2", releaseDate: "2023-02-01" },
-      { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
+      { _id: "2", title: "Item 2", releaseDate: "2023-02-01", posterUrl: "url2"},
+      { _id: "1", title: "Item 1", releaseDate: "2023-01-01", posterUrl: "url1"},      
+      { _id: "3", title: "Item 3", releaseDate: "2022-12-01", posterUrl: "url3"},
     ]);
   });
 
@@ -56,7 +59,7 @@ describe("getItems", () => {
     expect(result).toEqual([]);
   });
 
-  it("should handle items with missing releaseDate gracefully", async () => {
+  it("should handle items with missing releaseDate and missing posterUrl gracefully", async () => {
     const mockItems = [
       { _id: "1", title: "Item 1", releaseDate: "2023-01-01" },
       { _id: "2", title: "Item 2" }, // Missing releaseDate
