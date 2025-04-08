@@ -24,7 +24,7 @@ export async function index(
         console.log("done rendering reviews");
 
         myRatingSelector.value = myRaiting ? myRaiting.score.toString() : "none";
-        wlOptionsSelector.value = myWatchlistStatus;
+        wlOptionsSelector.value = myWatchlistStatus ? myWatchlistStatus.status : "none";
 
     }else{
         itemDetails.innerHTML = "<h3>Oops, something went wrong, please retry...</h3>";
@@ -42,11 +42,17 @@ export async function index(
         }
     });
 
-    // wlOptionsSelector.addEventListener("change", async (event) => {
-    //     const wlStatus = (event.target as HTMLSelectElement).value;        
-    //     console.log(`rating = ${wlStatus}`);
-    //     await setwlStatus(itemId, wlStatus);
-    // });
+    wlOptionsSelector.addEventListener("change", async (event) => {
+        const wlStatus = (event.target as HTMLSelectElement).value;        
+        console.log(`rating = ${wlStatus}`);
+        if (myWatchlistStatus){
+            console.log(`rating already exists, updating it`);
+            await setwlStatus(item, wlStatus, myWatchlistStatus._id);
+        } else{
+            console.log(`rating does not exist, creating it`);  
+            await setwlStatus(item, wlStatus);
+        }
+    });
 
     function renderItemOnPage(item : Item, usersRating : number) {
         

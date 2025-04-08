@@ -24,6 +24,17 @@ type Rating = {
     updatedAt?: string; 
 }
 
+type Watchlist = {
+    _id: string,
+    userId: string; 
+    itemId: string; 
+    itemTitle: string;
+    status: "Watching" | "Completed" | "Plan to Watch" | "Dropped";
+    createdAt?: string; 
+    updatedAt?: string; 
+}
+
+
 export type Review = {
     _id: string;
     userId: string; 
@@ -150,7 +161,8 @@ export async function getRatingbyUserID(itemID: string) : Promise<returnedRating
     } 
 }
 
-export async function getWatchlistStatus(itemID: string) : Promise<string>{
+export type returnedWatchlist = Omit<Watchlist,"userId"|"itemId"|"createdAt"|"updatedAt">
+export async function getWatchlistStatus(itemID: string) : Promise<returnedWatchlist|null>{
     console.log(`getWatchlistStatus with itemID = ${itemID} starts`);
     try {
         const res = await fetch(`/api/watchlist/?search=${itemID}`);
@@ -161,13 +173,13 @@ export async function getWatchlistStatus(itemID: string) : Promise<string>{
         const wlStatus = await res.json();
         console.log(`wlStatus = ${wlStatus}`);
         if (wlStatus.length > 0) {
-            return wlStatus.status;
+            return wlStatus;
         }else{
-            return "none";
+            return null;
         }        
     }catch (error) {
         console.error("Error fetching items:", error);
-        return "none";        
+        return null;        
     } 
 }
 
@@ -193,5 +205,30 @@ export async function setRating(item: returnedItems, rating: string, ratingId : 
         }        
     }catch (error) {
         console.error("Error setting raitings:", error);        
+    } 
+}
+
+export async function setwlStatus(item: returnedItems, wlStatus: string, wlId : string = "newWL") : Promise<void>{
+    console.log(`setwlStatus with itemID = ${item._id} and wlStatus = ${wlStatus} starts`);
+
+    const body = {
+        itemId: item._id,
+        itemTitle: item.title,
+        status: wlStatus,};
+
+    try {
+        const res = await fetch(`/api/watchlist/${wlId}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set watchlist status for ${item._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting watchlist status:", error);        
     } 
 }

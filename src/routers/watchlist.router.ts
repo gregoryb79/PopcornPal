@@ -76,7 +76,7 @@ router.put("/:id",authenticate, async (req, res) => {
         try{
             await WatchlistItem.findOneAndReplace(
                 {_id: id},
-                {...body, user : req.signedCookies.userId},
+                {...body, userId : req.signedCookies.userId},
                 { upsert: true }
             );
     
@@ -88,7 +88,7 @@ router.put("/:id",authenticate, async (req, res) => {
             res.send(`Couldnt put wlItem id: ${id}.`);
         }
     }else{
-        const newWLItem = new WatchlistItem({...body});
+        const newWLItem = new WatchlistItem({...body, userId : req.signedCookies.userId});
         console.log(newWLItem);
          try{
              await newWLItem.save();
