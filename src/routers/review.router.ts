@@ -24,7 +24,7 @@ router.get("/", authenticate, async (req, res) => {
         try{
             const reviews = await Review.find(
                 conditions.length ? { $or: conditions } : {},
-                { _id: true, itemTitle: true, content: true }              
+                { _id: true, itemTitle: true, content: true, updatedAt: true, itemId: true}              
             );        
             res.json(reviews);
         } catch(error) {
@@ -38,7 +38,7 @@ router.get("/", authenticate, async (req, res) => {
                 {                   
                     userId: userId
                 },
-                { _id: true, itemTitle: true, content: true }
+                { _id: true, itemTitle: true, content: true, updatedAt: true, itemId: true}
             );        
             res.json(reviews);
         } catch(error) {

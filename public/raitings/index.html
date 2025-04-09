@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
-    <title>PopcornPal</title>
+    <title>PopcornPal|My Raitings</title>
     <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -28,24 +28,13 @@
     <main class="u-margin-bottom-16">
         <section class="mainSubHeader u-margin-right-8 u-marginLeft-8">
             <h2>
-                My Reviews
-            </h2>         
-            <select id="sortingOptions" name="sortingOptions" class="sortingSelector">
-                <option value="Newest">Newest</option>
-                <option value="Oldest">Oldest</option>                
-            </select>   
+                My Raitings
+            </h2>            
         </section>
         
-        <section class="reviewsSection" id="reviewsSection"> 
-            <!-- the review form appears on top when needed                                    -->
-            <form class="reviewForm popUpForm showForm" name="reviewForm" id="reviewForm">
-                <input type="text" name="reviewId" hidden>
-                <label for="reviewText" class="u-bold u-laregFont"></label>
-                <textarea id="reviewText" name="reviewText" rows="2" placeholder="Input text..."></textarea> 
-                <button type="submit" class="u-margin-bottom-8">Submit</button>
-            </form>
-            <ul id="reviewsList" class="reviewsList"> 
-                <!-- Reviews will be populated here -->
+        <section class="reviewsSection" id="raitingsSection">            
+            <ul id="raitingsList" class="reviewsList"> 
+                <!-- Raitings will be populated here -->
             </ul>
         </section>
     </main>
@@ -54,8 +43,7 @@
         import { index } from "./views.js";
         import { logOut } from "../logout.js";
 
-        index(document.getElementById("reviewsList"),document.forms["reviewForm"]
-        ,document.getElementById("sortingOptions"));
+        index(document.getElementById("raitingsList"));;
 
         logOut(document.getElementById("logoutIcon"));
 

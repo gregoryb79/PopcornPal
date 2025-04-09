@@ -41,9 +41,26 @@ export type Review = {
     itemId: string; 
     itemTitle: string;
     content: string;    
-    createdAt?: string; 
-    updatedAt?: string; 
+    createdAt: string; 
+    updatedAt: string; 
 }
+
+export async function getCurrentUserId() : Promise<string|null> {
+    console.log("getCurrentUserId starts");    
+    try {
+        const res = await fetch("/userId");
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch userId. Status: ${res.status}. Message: ${message}`);
+        }        
+        const userId = await res.json();        
+        return userId;        
+    }catch (error) {
+        console.error("Error fetching userId:", error);
+        return null;        
+    } 
+}
+
 
 export async function doLogout() {
     console.log("doLogout starts");    
@@ -92,9 +109,7 @@ export async function getWatchListItems(watchlist:returnedWatchlist[],query : st
         console.error("Error fetching items:", error);
         throw error; 
     }
-}
-    
-
+}   
 
 export type returnedRating = Omit<Rating,"userId"|"createdAt"|"updatedAt">
 export async function getRatingbyID(itemID: string) : Promise<number>{
@@ -141,6 +156,22 @@ export async function getRatings(
   return ratingMap;
 }
 
+export async function getRatingsbyUser() : Promise<returnedRating[]>{
+    console.log(`get all ratings by user starts`);
+    try {
+        const res = await fetch(`/api/ratings`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch raitings for user. Status: ${res.status}. Message: ${message}`);
+        }       
+        const ratings : returnedRating [] =  await res.json();        
+        return ratings;        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return []        
+    } 
+}
+
 export async function getItem(itemId:string) {
   console.log(`getItem with itemId = ${itemId} starts`);
   try {        
@@ -157,7 +188,7 @@ export async function getItem(itemId:string) {
   }     
 }
 
-export type returnedReview = Omit<Review,"userId"|"createdAt"|"updatedAt">
+export type returnedReview = Omit<Review,"userId"|"createdAt">
 export async function getReviewsbyID(itemID: string) : Promise<returnedReview[]>{
     console.log(`getReviewsbyID with itemID = ${itemID} starts`);
     try {
@@ -186,6 +217,84 @@ export async function getReviewsbyUser() : Promise<returnedReview[]>{
     }catch (error) {
         console.error("Error fetching items:", error);
         return [];        
+    } 
+}
+
+export async function getReviewbyUserID(itemId : string) : Promise<returnedReview|null>{
+    console.log(`getReviewbyUserID with itemId = ${itemId} starts`);
+    try {
+        const res = await fetch(`/api/reviews`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch reviews for ${itemId}. Status: ${res.status}. Message: ${message}`);
+        }       
+        const reviews : returnedReview [] =  await res.json();
+        console.log(`reviews = ${JSON.stringify(reviews)}`);
+        if (reviews.length > 0) {
+            const review = reviews.find(review => review.itemId === itemId) || null;
+            console.log(`review = ${JSON.stringify(review)}`);
+            if (review) {
+                return review;
+            } else{
+                return null;
+            }                        
+        }else{
+            console.log(`No User's reviews found for itemId: ${itemId} returning null`);
+            return null;
+        }        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return null;        
+    } 
+}
+
+export async function setReview(item: returnedItems, review: string, reviewId : string = "newReview") : Promise<void>{
+    console.log(`setReview with itemID = ${item._id} and review = ${review} starts`);
+
+    const body = {
+        itemId: item._id,
+        itemTitle: item.title,
+        content: review,};
+
+    try {
+        const res = await fetch(`/api/reviews/${reviewId}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set reviews for ${item._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting reviews:", error);        
+    } 
+}
+
+export async function updateReview(review: returnedReview) : Promise<void>{
+    console.log(`updateReview with reviewID = ${review._id} and review = ${review.content} starts`);
+
+    const body = {
+        itemId: review.itemId,
+        itemTitle: review.itemTitle,
+        content: review.content,};
+
+    try {
+        const res = await fetch(`/api/reviews/${review._id}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set reviews for ${review._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting reviews:", error);        
     } 
 }
 
@@ -351,79 +460,3 @@ export async function setwlStatus(item: returnedItems, wlStatus: string = "Plan 
     } 
 }
 
-export async function getReviewbyUserID(itemId : string) : Promise<returnedReview|null>{
-    console.log(`getReviewbyUserID with itemId = ${itemId} starts`);
-    try {
-        const res = await fetch(`/api/reviews`);
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to fetch reviews for ${itemId}. Status: ${res.status}. Message: ${message}`);
-        }       
-        const reviews : returnedReview [] =  await res.json();
-        if (reviews.length > 0) {
-            const review = reviews.find(review => review.itemId === itemId) || null;
-            console.log(`review = ${JSON.stringify(review)}`);
-            if (review) {
-                return review;
-            } else{
-                return null;
-            }                        
-        }else{
-            console.log(`No User's reviews found for itemId: ${itemId} returning null`);
-            return null;
-        }        
-    }catch (error) {
-        console.error("Error fetching items:", error);
-        return null;        
-    } 
-}
-
-export async function setReview(item: returnedItems, review: string, reviewId : string = "newReview") : Promise<void>{
-    console.log(`setReview with itemID = ${item._id} and review = ${review} starts`);
-
-    const body = {
-        itemId: item._id,
-        itemTitle: item.title,
-        content: review,};
-
-    try {
-        const res = await fetch(`/api/reviews/${reviewId}`, {
-            method: "put",
-            body: JSON.stringify(body),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to set reviews for ${item._id}. Status: ${res.status}. Message: ${message}`);
-        }        
-    }catch (error) {
-        console.error("Error setting reviews:", error);        
-    } 
-}
-
-export async function updateReview(review: returnedReview) : Promise<void>{
-    console.log(`updateReview with reviewID = ${review._id} and review = ${review.content} starts`);
-
-    const body = {
-        itemId: review.itemId,
-        itemTitle: review.itemTitle,
-        content: review.content,};
-
-    try {
-        const res = await fetch(`/api/reviews/${review._id}`, {
-            method: "put",
-            body: JSON.stringify(body),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to set reviews for ${review._id}. Status: ${res.status}. Message: ${message}`);
-        }        
-    }catch (error) {
-        console.error("Error setting reviews:", error);        
-    } 
-}

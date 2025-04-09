@@ -1,11 +1,13 @@
 import {getReviewsbyUser, returnedReview, updateReview} from "../model.js";
 
 export async function index(    
-    reviewsList: HTMLElement, searchForm: HTMLFormElement, reviewForm: HTMLFormElement,) {
+    reviewsList: HTMLElement, reviewForm: HTMLFormElement
+    ,sortingOptions: HTMLSelectElement) {
         
+    let sort = "Newest";
+    let reviews: returnedReview[] = await getReviewsbyUser (); 
 
-    const reviews: returnedReview[] = await getReviewsbyUser (); 
-    console.log(`reviews = ${reviews}`);  
+    console.log(`reviews = ${reviews[0].updatedAt}`);  
     renderReviews(reviews);     
 
     reviewsList.addEventListener("click", async (event) => {
@@ -27,6 +29,12 @@ export async function index(
         }
     });
 
+    sortingOptions.addEventListener("change", async (event) => {
+        sort = (event.target as HTMLSelectElement).value;
+        console.log(`Sorting by: ${sort}`);        
+        renderReviews(reviews, sort);
+    });
+
     reviewForm.addEventListener("submit", async (event) => {
         event.preventDefault();  
         const reviewText = reviewForm["reviewText"].value;  
@@ -39,16 +47,24 @@ export async function index(
         }
         reviewForm.reset();
         reviewForm.classList.remove("active"); 
-        const updatedReviews: returnedReview[] = await getReviewsbyUser ();
-        renderReviews(updatedReviews); 
+        reviews = await getReviewsbyUser ();
+        renderReviews(reviews, sort); 
     });
 
 
-    function renderReviews(reviews : returnedReview[]) {
+    function renderReviews(reviews : returnedReview[], sort: string = "Newest") {
+        if (sort === "Oldest") {
+            console.log("Oldest sort selected");
+            reviews.sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+        } else {
+            console.log("Newest sort selected");
+            reviews.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+        }
         reviewsList.innerHTML=` 
                 ${reviews.map((review) => `
                     <li class="reviewCard u-clickable" data-id="${review._id}"> 
                         <h3>${review.itemTitle}</h3>
+                        <p class="u-secondaryColor u-itemTextFont">${(new Date(review.updatedAt).toLocaleDateString("he"))}</p>
                         <p>${review.content}</p>
                     </li>
                     `).join("\n")}`;

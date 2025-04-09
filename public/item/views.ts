@@ -1,11 +1,12 @@
 import { Item, getItem, getRatingbyID, getReviewsbyID, returnedReview,
     getRatingbyUserID, getWatchlistStatus,
-    setwlStatus, setRating, getReviewbyUserID, setReview } from "../model.js";
+    setwlStatus, setRating, getReviewbyUserID, setReview, 
+    } from "../model.js";
 
 export async function index(
-    itemTitle: HTMLElement,itemDetails: HTMLElement,reviewsSection: HTMLElement,
+    itemTitle: HTMLElement,itemDetails: HTMLElement,
     reviewsList: HTMLElement, myRatingSelector: HTMLSelectElement, wlOptionsSelector: HTMLSelectElement,
-    reviewForm: HTMLFormElement) {
+    reviewForm: HTMLFormElement) {    
     
     const itemId = window.location.hash.substring(1); 
     const item = await getItem(itemId);  
@@ -17,7 +18,7 @@ export async function index(
     console.log(`reviews = ${reviews}`);
 
     const myReview = await getReviewbyUserID (itemId);
-    console.log(`myReview = ${myReview?.content}`);
+    console.log(`myReview = ${myReview?.content}`);   
 
     const myRaiting = await getRatingbyUserID (itemId);
     console.log(`myRaiting = ${myRaiting?.score}`);    
@@ -28,12 +29,20 @@ export async function index(
     if(item){
         renderItemOnPage(item,usersRating);
         console.log("done rendering item on page");
-        renderReviews(reviews);
-        console.log("done rendering reviews");
+        
+        
 
         myRatingSelector.value = myRaiting ? myRaiting.score.toString() : "none";
         wlOptionsSelector.value = myWatchlistStatus ? myWatchlistStatus.status : "none";
-        reviewForm["reviewText"].value = myReview ? myReview.content : "Write your review here...";
+        if (myReview){
+            reviewForm["reviewText"].value = myReview.content;
+            reviewForm.querySelector('button[type="submit"]')!.textContent = "Update";
+            renderReviews(reviews.filter(review => review._id !== myReview._id));
+            console.log("done rendering filtered reviews");
+        }else{
+            renderReviews(reviews);
+            console.log("done rendering reviews");
+        }
 
     }else{
         itemDetails.innerHTML = "<h3>Oops, something went wrong, please retry...</h3>";
@@ -69,10 +78,11 @@ export async function index(
         console.log(`reviewText = ${reviewText}`);
         if (myReview){
             console.log(`review already exists, updating it`);
-            await setReview(item, reviewText, myReview._id);
+            await setReview(item, reviewText, myReview._id);            
         } else{
             console.log(`review does not exist, creating it`);  
             await setReview(item, reviewText);
+            reviewForm.querySelector('button[type="submit"]')!.textContent = "Update";
         }
     });
 
@@ -101,6 +111,7 @@ export async function index(
     }
 
     function renderReviews(reviews : returnedReview[]) {
+        
         reviewsList.innerHTML=` 
                 ${reviews.map((review) => `
                     <li class="reviewCard"> - ${review.content}</li>

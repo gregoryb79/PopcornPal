@@ -112,6 +112,23 @@ main {
     cursor: pointer;
 }
 
+.u-bold{
+    font-weight: bold;
+}
+
+.u-secondaryColor{
+    color: var(--text_color_secondary);
+}
+.u-primaryColor{
+    color: var(--text_color_main);
+}
+.u-itemTextFont{
+    font-size: var(--itemTextFont);
+}
+.u-largeFont{
+    font-size: var(--largeFont);
+}
+
 .mainSubHeader{
     display: flex;
     justify-content: space-between;

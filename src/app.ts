@@ -47,6 +47,12 @@ app.all("/", (req, res, next) => {
     next();
 });
 
+app.get("/userId", (req, res) => {
+    const userId = req.signedCookies.userId;
+    console.log(`userId = ${userId}`);
+    res.json({ userId });
+});
+
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
