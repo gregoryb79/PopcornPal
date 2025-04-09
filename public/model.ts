@@ -77,6 +77,25 @@ export async function getItems(query : string) : Promise<returnedItems[]> {
     }    
 }
 
+export async function getWatchListItems(watchlist:returnedWatchlist[],query : string) {
+    console.log(`getWatchListItems with query = ${query} starts`);
+    try {        
+        const res = await fetch(`/api/items${query}`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch notes. Status: ${res.status}. Message: ${message}`);
+        }       
+        const items: returnedItems[] =  await res.json();
+        const wlItems = watchlist.map(wlItem => wlItem.itemId);        
+        return items.filter(item => wlItems.includes(item._id)).sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        throw error; 
+    }
+}
+    
+
+
 export type returnedRating = Omit<Rating,"userId"|"createdAt"|"updatedAt">
 export async function getRatingbyID(itemID: string) : Promise<number>{
     console.log(`getRatingbyID with itemID = ${itemID} starts`);
@@ -329,7 +348,11 @@ export async function getReviewbyUserID(itemId : string) : Promise<returnedRevie
         if (reviews.length > 0) {
             const review = reviews.find(review => review.itemId === itemId) || null;
             console.log(`review = ${JSON.stringify(review)}`);
-            return review;            
+            if (review) {
+                return review;
+            } else{
+                return null;
+            }                        
         }else{
             console.log(`No User's reviews found for itemId: ${itemId} returning null`);
             return null;

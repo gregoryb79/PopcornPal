@@ -38,7 +38,7 @@ router.get("/", authenticate, async (req, res) => {
                 {                   
                     userId: userId
                 },
-                { _id: true, itemId: true, itemTitle: true, score: true}
+                { _id: true, itemTitle: true, content: true }
             );        
             res.json(reviews);
         } catch(error) {

@@ -9,7 +9,7 @@ const testUserId = new mongoose.Types.ObjectId();
 
 const app = express();
 app.use(express.json());
-app.use((req, res, next) => {
+app.use((req, _, next) => {
   req.signedCookies = { userId: testUserId.toString() };
   next();
 });
