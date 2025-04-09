@@ -1,0 +1,50 @@
+:root{
+    --text_color_main: #000000;
+    --text_color_secondary: #545454;
+    --background_color: #FAFAFF;
+    --color-secondary: #545454;
+    --margin-color:#d5d8f6;
+    --shadow-color: #d5d8f6;
+
+    @media (prefers-color-scheme: dark) {
+        --text_color_main: #FFFFFF;
+        --text_color_secondary: #cccccc;
+        --background_color: #36454F;
+        --color-secondary: #ABABAB;
+        --margin-color: #808080;
+        --shadow-color: #d5d8f6;
+    }
+
+    --card-width: 10rem;
+    --card-height: 20rem;
+
+    --itemTitleFont: 1rem;
+    --itemTextFont: 0.75rem;
+    --defaultFont: 1rem;
+    --largeFont: 1.5rem;
+    --bodyWidth: min(50rem, 100% - 2rem);
+
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html {
+    font-size: var(--defaultFont);
+    line-height: 1.5;
+}
+
+input, textarea, button {
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+}
+
+textarea {
+    resize: none;
+}

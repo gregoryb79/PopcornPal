@@ -6,28 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
     <title>PopcornPal|Welcome</title>
-    <link rel="stylesheet" href="../styles.css" />
+    
+    <link rel="stylesheet" href="../reset.css" />
+    <link rel="stylesheet" href="../composition.css" />
+    <link rel="stylesheet" href="../utilities.css" />
+    <link rel="stylesheet" href="../block.css" />
+    <link rel="stylesheet" href="../exceptions.css" />
 </head>
 
 <body class="u-border-radius-8">
-    <header class="u-margin-top-8">
+    <header class="u-margin-top-8" role="banner">
         <h1> Welcome to PopcornPal 🍿</h1>                    
     </header>
 
-    <main class="u-margin-bottom-16">
-        <form name="loginForm" class="loginForm u-border-radius-8"> 
+    <main class="u-margin-bottom-16" role="main">
+        <form name="loginForm" class="loginForm u-border-radius-8" aria-labelledby="loginFormLabel"> 
+            <h2 id="loginFormLabel" class="visually-hidden">Login Form</h2>
             <section class="u-margin-top-8">
                 <label for="login">Login</label>
-                <input type="email" name="email" id="login" autocomplete="login" required placeholder="e-mail">
+                <input type="email" name="email" id="login" autocomplete="login" required placeholder="e-mail" aria-label="Enter your email">
             </section>  
             <section>
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" autocomplete="current-password" required placeholder="password">            
+                <input type="password" name="password" id="password" autocomplete="current-password" required placeholder="password" aria-label="Enter your password">            
             </section>                     
             <button type="submit" name="action" value="submit">Submit</button>            
             <p class="registerLine">Don't have a user? <a href="../register">Register</a>.</p>
         </form>      
-        
     </main>
 
     <script type="module">

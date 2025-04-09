@@ -1,0 +1,31 @@
+body {
+    font-family: system-ui;
+    width: var(--bodyWidth);
+    margin-inline: auto;
+    border: 1px solid grey;    
+}
+
+ul, ol, menu, li, nav {
+    padding: 0;
+    list-style: none;
+    
+}
+
+h1{
+    font-size: 3rem;
+    color: var(--text_color_main);
+    text-align: center;
+}
+
+h4{
+    font-size: var(--itemTitleFont);
+    color: var(--text_color_main);
+}
+
+main {
+        
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;    
+    min-height: 85vh;   
+}

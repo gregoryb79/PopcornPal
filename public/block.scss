@@ -1,134 +1,12 @@
-:root{
-    --text_color_main: #000000;
-    --text_color_secondary: #545454;
-    --background_color: #FAFAFF;
-    --color-secondary: #545454;
-    --margin-color:#d5d8f6;
-    --shadow-color: #d5d8f6;
 
-    @media (prefers-color-scheme: dark) {
-        --text_color_main: #FFFFFF;
-        --text_color_secondary: #cccccc;
-        --background_color: #36454F;
-        --color-secondary: #ABABAB;
-        --margin-color: #808080;
-        --shadow-color: #d5d8f6;
-    }
-
-    --card-width: 10rem;
-    --card-height: 20rem;
-
-    --itemTitleFont: 1rem;
-    --itemTextFont: 0.75rem;
-    --defaultFont: 1rem;
-    --largeFont: 1.5rem;
-    --bodyWidth: min(50rem, 100% - 2rem);
-
-}
-
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
-* {
-    margin: 0;
-}
-
-html {
-    font-size: var(--defaultFont);
-    line-height: 1.5;
-}
-
-body {
-    font-family: system-ui;
-    width: var(--bodyWidth);
-    margin-inline: auto;
-    border: 1px solid grey;
-    // min-height: 90vh;
-}
-
-ul, ol, menu, li, nav {
-    padding: 0;
-    list-style: none;
-    
-}
-
-h1{
-    font-size: 3rem;
-    color: var(--text_color_main);
-    text-align: center;
-}
-
-h4{
-    font-size: var(--itemTitleFont);
-    color: var(--text_color_main);
-}
-
-input, textarea, button {
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-}
-
-textarea {
-    resize: none;
-}
-
-main {
-        
+.block404{
     display: flex;
     flex-direction: column;
-    gap: 1rem;    
-    min-height: 85vh;   
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 20%;
 }
-
-.u-margin-top-16{
-    margin-top: 1rem;
-}
-.u-margin-top-8{
-    margin-top: 0.5rem;
-}
-.u-margin-bottom-16{
-    margin-bottom: 1rem;
-}
-
-.u-margin-bottom-8{
-    margin-bottom: 0.5rem;
-}
-
-.u-marginLeft-8{
-    margin-left: 0.5rem;
-}
-
-.u-margin-right-8{
-    margin-right: 0.5rem;
-}
-
-.u-border-radius-8{
-    border-radius: 0.5rem;
-}
-
-.u-clickable{
-    cursor: pointer;
-}
-
-.u-bold{
-    font-weight: bold;
-}
-
-.u-secondaryColor{
-    color: var(--text_color_secondary);
-}
-.u-primaryColor{
-    color: var(--text_color_main);
-}
-.u-itemTextFont{
-    font-size: var(--itemTextFont);
-}
-.u-largeFont{
-    font-size: var(--largeFont);
-}
-
 .mainSubHeader{
     display: flex;
     justify-content: space-between;
@@ -148,9 +26,7 @@ main {
 
 .icon{
     width: 3rem;
-    height: 3rem;
-    // border-radius: 50%;
-    // background-color: lightgrey;
+    height: 3rem;    
     text-align: center;
     font-size: 2rem;
     cursor: pointer;
@@ -177,9 +53,7 @@ main {
     flex-wrap: wrap;
     gap: 1rem;
     margin-left: auto;
-    margin-right: auto;
-    // background-color: red;
-   
+    margin-right: auto;   
 }
 
 .itemCard {
@@ -276,7 +150,7 @@ main {
     width: 90%;
 
     img{
-        // width: clamp(16rem, 20%, 20%);
+        
         height: 15rem;        
     }
 
