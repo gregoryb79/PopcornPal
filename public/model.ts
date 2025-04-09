@@ -45,23 +45,6 @@ export type Review = {
     updatedAt: string; 
 }
 
-export async function getCurrentUserId() : Promise<string|null> {
-    console.log("getCurrentUserId starts");    
-    try {
-        const res = await fetch("/userId");
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to fetch userId. Status: ${res.status}. Message: ${message}`);
-        }        
-        const userId = await res.json();        
-        return userId;        
-    }catch (error) {
-        console.error("Error fetching userId:", error);
-        return null;        
-    } 
-}
-
-
 export async function doLogout() {
     console.log("doLogout starts");    
     try {
@@ -94,6 +77,8 @@ export async function getItems(query : string) : Promise<returnedItems[]> {
     }    
 }
 
+//filters items returned from the server (all movies and series that fit to query) and leaves only the 
+// items that are on watchlist
 export async function getWatchListItems(watchlist:returnedWatchlist[],query : string) {
     console.log(`getWatchListItems with query = ${query} starts`);
     try {        
