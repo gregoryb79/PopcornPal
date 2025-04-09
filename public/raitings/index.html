@@ -32,6 +32,8 @@
             </h2>            
         </section>
         
+        <div id="loadingSpinner" class="loading-spinner"></div>
+
         <section class="reviewsSection" id="raitingsSection">            
             <ul id="raitingsList" class="reviewsList"> 
                 <!-- Raitings will be populated here -->
@@ -43,7 +45,7 @@
         import { index } from "./views.js";
         import { logOut } from "../logout.js";
 
-        index(document.getElementById("raitingsList"));;
+        index(document.getElementById("raitingsList"),document.getElementById("loadingSpinner"));;
 
         logOut(document.getElementById("logoutIcon"));
 

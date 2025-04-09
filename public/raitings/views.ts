@@ -1,11 +1,24 @@
 import {getRatingsbyUser, returnedRating} from "../model.js";
 
-export async function index(ratingsList: HTMLElement) {
+export async function index(ratingsList: HTMLElement, loadingSpinner: HTMLElement) {
        
-    const raitings = await getRatingsbyUser(); 
-    console.log(`raitings = ${raitings}`); 
-   
-    renderRaitings(raitings);     
+     
+    try{
+        if (loadingSpinner) {
+            loadingSpinner.style.display = "block";
+        }
+
+        const raitings = await getRatingsbyUser(); 
+        console.log(`raitings = ${raitings}`);    
+        renderRaitings(raitings); 
+
+    } catch (error) {
+        console.error("Error rendering items:", error);
+    }finally {        
+        if (loadingSpinner) {
+            loadingSpinner.style.display = "none";
+        }
+    }   
 
     ratingsList.addEventListener("click", async (event) => {
         const target = event.target as HTMLElement;

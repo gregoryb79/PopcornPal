@@ -40,7 +40,9 @@
                 <option value="Top Rated">Top Rated</option>
             </select>
         </section>
-       
+        
+        <div id="loadingSpinner" class="loading-spinner"></div>
+
         <ul id="itemsList" class="itemsList">
             <!-- all the movies and series are populated here -->            
         </ul>
@@ -51,7 +53,7 @@
         import { logOut } from "../logout.js";
 
         index(document.getElementById("itemsList"),document.forms["searchForm"],
-                document.getElementById("sortingOptions"));
+            document.getElementById("sortingOptions"), document.getElementById("loadingSpinner"));
 
         logOut(document.getElementById("logoutIcon"));
 

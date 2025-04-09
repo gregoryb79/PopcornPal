@@ -59,6 +59,8 @@
             </section>                  
         </section>
 
+        <div id="loadingSpinner" class="loading-spinner"></div>
+
         <section class="reviewsSection" id="reviewsSection">                        
             <h2>Reviews</h2>
             <form class="reviewForm" name="reviewForm" id="reviewForm">
@@ -80,7 +82,8 @@
             document.getElementById("reviewsList"),
             document.getElementById("myRaiting"),
             document.getElementById("wlOptions"),
-            document.forms["reviewForm"]);
+            document.forms["reviewForm"],
+            document.getElementById("loadingSpinner"));
 
         logOut(document.getElementById("logoutIcon"));
 

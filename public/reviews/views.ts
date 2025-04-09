@@ -1,14 +1,26 @@
 import {getReviewsbyUser, returnedReview, updateReview} from "../model.js";
 
 export async function index(    
-    reviewsList: HTMLElement, reviewForm: HTMLFormElement
-    ,sortingOptions: HTMLSelectElement) {
+    reviewsList: HTMLElement, reviewForm: HTMLFormElement,sortingOptions: HTMLSelectElement,
+    loadingSpinner: HTMLElement) {
         
     let sort = "Newest";
-    let reviews: returnedReview[] = await getReviewsbyUser (); 
-
-    console.log(`reviews = ${reviews[0].updatedAt}`);  
-    renderReviews(reviews);     
+    let reviews: returnedReview[] = [];   
+        
+    try{
+        if (loadingSpinner) {
+            loadingSpinner.style.display = "block";
+        }    
+        reviews = await getReviewsbyUser (); 
+        console.log(`reviews = ${reviews[0].updatedAt}`);  
+        renderReviews(reviews);     
+    } catch (error) {
+        console.error("Error rendering items:", error);
+    }finally {        
+        if (loadingSpinner) {
+            loadingSpinner.style.display = "none";
+        }
+    } 
 
     reviewsList.addEventListener("click", async (event) => {
         const target = event.target as HTMLElement;
@@ -47,8 +59,19 @@ export async function index(
         }
         reviewForm.reset();
         reviewForm.classList.remove("active"); 
-        reviews = await getReviewsbyUser ();
-        renderReviews(reviews, sort); 
+        try{
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "block";
+            }    
+            reviews = await getReviewsbyUser ();
+            renderReviews(reviews, sort);     
+        } catch (error) {
+            console.error("Error rendering items:", error);
+        }finally {        
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "none";
+            }
+        }        
     });
 
 

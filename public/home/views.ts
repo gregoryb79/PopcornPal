@@ -2,15 +2,28 @@ import {getItems, getRatings, getWatchlist, addToWatchlist,
         removeFromWatchlist} from "../model.js"
 
 export async function index(itemsList : HTMLElement, searchForm : HTMLFormElement,
-    sortingOptions : HTMLSelectElement, logoutIcon : HTMLElement
+    sortingOptions : HTMLSelectElement, loadingSpinner : HTMLElement
 ){
 
     console.log("hello PopcornPal");
-
-    const watchlist = await getWatchlist();
+    
+    const watchlist = await getWatchlist();    
     let sort = "Newest";
 
-    renderItemsCards("",sort);
+    try{
+        if (loadingSpinner) {
+            loadingSpinner.style.display = "block";
+        }
+
+        await renderItemsCards("",sort);
+    } catch (error) {
+        console.error("Error rendering items:", error);
+    }finally {        
+        if (loadingSpinner) {
+            loadingSpinner.style.display = "none";
+        }
+    }
+    
 
     itemsList.addEventListener("click", async (event) => {
         const target = event.target as HTMLElement;
@@ -43,13 +56,37 @@ export async function index(itemsList : HTMLElement, searchForm : HTMLFormElemen
         const formData = new FormData(searchForm);
         const query = formData.get("search") as string;        
         console.log(`Searching for: ${query}`);
-        await renderItemsCards(`?search=${query}`, sort);        
+
+        try{
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "block";
+            }    
+            await renderItemsCards(`?search=${query}`, sort);
+        } catch (error) {
+            console.error("Error rendering items:", error);
+        }finally {        
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "none";
+            }
+        }
+                
     });
 
     sortingOptions.addEventListener("change", async (event) => {
         sort = (event.target as HTMLSelectElement).value;
         console.log(`Sorting by: ${sort}`);
-        await renderItemsCards("", sort);
+        try{
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "block";
+            }    
+            await renderItemsCards("", sort);
+        } catch (error) {
+            console.error("Error rendering items:", error);
+        }finally {        
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "none";
+            }
+        }        
     });
    
    async function renderItemsCards(query : string, sort: string = "Newest"){ 

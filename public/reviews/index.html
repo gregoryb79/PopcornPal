@@ -35,6 +35,8 @@
                 <option value="Oldest">Oldest</option>                
             </select>   
         </section>
+
+        <div id="loadingSpinner" class="loading-spinner"></div>
         
         <section class="reviewsSection" id="reviewsSection"> 
             <!-- the review form appears on top when needed                                    -->
@@ -55,7 +57,7 @@
         import { logOut } from "../logout.js";
 
         index(document.getElementById("reviewsList"),document.forms["reviewForm"]
-        ,document.getElementById("sortingOptions"));
+        ,document.getElementById("sortingOptions"),document.getElementById("loadingSpinner"));
 
         logOut(document.getElementById("logoutIcon"));
 
