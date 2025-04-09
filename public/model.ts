@@ -173,6 +173,21 @@ export async function getReviewsbyID(itemID: string) : Promise<returnedReview[]>
         return [];        
     } 
 }
+export async function getReviewsbyUser() : Promise<returnedReview[]>{
+    console.log(`get all reviews by user starts`);
+    try {
+        const res = await fetch(`/api/reviews`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch reviews for user. Status: ${res.status}. Message: ${message}`);
+        }       
+        const reviews : returnedReview [] =  await res.json();        
+        return reviews;        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return [];        
+    } 
+}
 
 export async function getRatingbyUserID(itemID: string) : Promise<returnedRating|null>{
     console.log(`getRatingbyUserID with itemID = ${itemID} starts`);
@@ -382,6 +397,31 @@ export async function setReview(item: returnedItems, review: string, reviewId : 
         if (!res.ok) {
             const message = await res.text();             
             throw new Error(`Failed to set reviews for ${item._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting reviews:", error);        
+    } 
+}
+
+export async function updateReview(review: returnedReview) : Promise<void>{
+    console.log(`updateReview with reviewID = ${review._id} and review = ${review.content} starts`);
+
+    const body = {
+        itemId: review.itemId,
+        itemTitle: review.itemTitle,
+        content: review.content,};
+
+    try {
+        const res = await fetch(`/api/reviews/${review._id}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set reviews for ${review._id}. Status: ${res.status}. Message: ${message}`);
         }        
     }catch (error) {
         console.error("Error setting reviews:", error);        
