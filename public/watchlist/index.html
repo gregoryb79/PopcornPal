@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
-    <title>PopcornPal</title>
+    <title>PopcornPal|My Watchlist</title>
     <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -17,7 +17,7 @@
             </h2>
             <form name="searchForm" class="searchForm">
                 <input type="search" name="search" placeholder="Search..." />
-                <button type="submit">Search</button>
+                <button class="u-border-radius-8" type="submit">Search</button>
             </form> 
             <img src="../logout.svg" alt="logout icon" class="icon" id="logoutIcon">            
         </section>
@@ -34,13 +34,18 @@
             <h2>
                 My Watchlist
             </h2>
+            <a href="/new-item">
+                <button class="u-border-radius-8" id="addNewItemButton" type="button">
+                    Submit New Item
+                </button>
+            </a>
             <select id="sortingOptions" name="sortingOptions" class="sortingSelector">
                 <option value="Newest">Newest</option>
                 <option value="Oldest">Oldest</option>
                 <option value="Top Rated">Top Rated</option>
             </select>
-        </section>
-       
+        </section>        
+        
         <ul id="itemsList" class="itemsList">
             <!-- all the movies and series are populated here -->            
         </ul>
@@ -51,7 +56,7 @@
         import { logOut } from "../logout.js";
 
         index(document.getElementById("itemsList"),document.forms["searchForm"],
-                document.getElementById("sortingOptions"));
+                document.getElementById("sortingOptions"),document.getElementById("addNewItemButton"));
 
         logOut(document.getElementById("logoutIcon"));
 

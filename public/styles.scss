@@ -129,6 +129,12 @@ main {
     font-size: var(--largeFont);
 }
 
+button{
+    &:hover{            
+        color: var(--text_color_secondary);
+    }
+}
+
 .mainSubHeader{
     display: flex;
     justify-content: space-between;
@@ -348,4 +354,32 @@ main {
         opacity: 1;
         visibility: visible; 
     }
+}
+
+
+.newItemform{
+    
+    margin: 0 auto auto auto;
+    border: 1px solid darkgray;    
+    font-size: var(--largeFont);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;           
+    width: 90%;
+
+    section{
+        margin-top: 0.5rem;
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;  
+        flex-wrap: wrap;      
+    }
+    button{        
+        font-size: var(--largeFont);
+        &:hover{            
+            color: var(--text_color_secondary);
+        }
+    } 
 }

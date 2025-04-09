@@ -2,7 +2,7 @@ import {getWatchListItems, getRatings, getWatchlist,
         removeFromWatchlist} from "../model.js"
 
 export async function index(itemsList : HTMLElement, searchForm : HTMLFormElement,
-    sortingOptions : HTMLSelectElement){    
+    sortingOptions : HTMLSelectElement,addNewItem : HTMLButtonElement) {    
 
     let watchlist = await getWatchlist();
     let sort = "Newest";
