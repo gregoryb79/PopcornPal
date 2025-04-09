@@ -40,5 +40,9 @@ export async function index(ratingsList: HTMLElement, loadingSpinner: HTMLElemen
                     </li>
                     `).join("\n")}`;
         console.log("Raitings rendered successfully");
+
+        if (raitings.length === 0) {
+            ratingsList.innerHTML = `<h3>You sibmitted no raitings yet.</h3>`;
+        }
     }
 }

@@ -11,8 +11,7 @@ export async function index(
         if (loadingSpinner) {
             loadingSpinner.style.display = "block";
         }    
-        reviews = await getReviewsbyUser (); 
-        console.log(`reviews = ${reviews[0].updatedAt}`);  
+        reviews = await getReviewsbyUser ();           
         renderReviews(reviews);     
     } catch (error) {
         console.error("Error rendering items:", error);
@@ -92,5 +91,9 @@ export async function index(
                     </li>
                     `).join("\n")}`;
         console.log("Reviews rendered successfully");
+
+        if (reviews.length === 0) {
+            reviewsList.innerHTML = `<h3>You submitted no reviews yet.</h3>`;
+        }
     }
 }
