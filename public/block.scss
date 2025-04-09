@@ -99,6 +99,11 @@
         cursor: pointer;
         margin-top: 0.25rem;
         border-radius: 0.5rem;
+        &:focus {
+            outline: 3px solid #007BFF;
+            // outline-offset: 4px;
+            border-radius: 6px;
+        }
     }  
         
     p{
@@ -151,6 +156,12 @@
         cursor: pointer;
         font-size: var(--largeFont);
         &:hover{            
+            color: var(--text_color_secondary);
+        }
+        &:focus {
+            outline: 3px solid #007BFF;
+            // outline-offset: 4px;
+            border-radius: 6px;
             color: var(--text_color_secondary);
         }
     } 

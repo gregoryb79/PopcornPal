@@ -16,11 +16,6 @@
 - PUT /items/:id – Edit info (admin)
 - DELETE /items/:id
 
-# Episodes
-- GET /shows/:id/episodes
-- POST /shows/:id/episodes
-- GET /episodes/:id
-
 # Watchlist
 - GET /watchlist
 - POST /watchlist (add/update)

@@ -19,16 +19,6 @@
   seasons: Number, // - optional
 }
 
-// Episode
-{
-  title: string, // - required
-  seasonNumber: Number, // - required
-  episodeNumber: Number, // - required
-  airDate: Date, // - optional
-  runtime: Number, // - optional
-  showId: ObjectId, // ref to Item - required
-}
-
 // WatchlistItem
 {
   userId: ObjectId, // - required

@@ -109,7 +109,7 @@ export async function index(itemsList : HTMLElement, searchForm : HTMLFormElemen
             itemsList.innerHTML = items
                 .map((item) => `                                
                                 <li class="itemCard" data-id="${item._id}">
-                                    <img src=${item.posterUrl ? item.posterUrl : `../placeholder_poster.jpg`} alt="poster image"></img>
+                                    <img src=${item.posterUrl ? item.posterUrl : `../placeholder_poster.jpg`} alt="poster image of ${item.title}" tabindex="0"></img>
                                     <h4>${item.title}</h4>
                                     <p class="releaseYear">${(new Date(item.releaseDate)).getFullYear()}</p>
                                     <section class="raitingANDlist">
