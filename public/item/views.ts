@@ -26,6 +26,8 @@ export async function index(
 
         item = await getItem(itemId);  
 
+        document.title = `PopcornPal | ${item?.title}`;
+
         usersRating = await getRatingbyID (itemId);
         console.log(`usersRating = ${usersRating}`);
     
@@ -125,7 +127,7 @@ export async function index(
                 ${item.title}
             </h2>            
             <p>
-                ${(new Date(item.releaseDate)).getFullYear()} - ${item.genres[0]} ${item.runtime ? ` - ${item.runtime} min.` : ""}
+                ${(new Date(item.releaseDate)).getFullYear()} - ${item.genres[0]} ${item.runtime ? ` - ${item.runtime} min.` : ""} ${item.seasons ? ` - ${item.seasons} ${item.seasons > 1 ? ` seasons` : `season`}` : ""}
             </p>
         `;
 
