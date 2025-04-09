@@ -22,9 +22,12 @@
     --itemTextFont: 0.75rem;
     --defaultFont: 1rem;
     --largeFont: 1.5rem;
-    --bodyWidth: min(50rem, 100% - 2rem);
+    --bodyWidth: min(50rem, 100% - 2rem);   
 
 }
+
+$bp-mobile: 27rem;
+
 
 *, *::before, *::after {
     box-sizing: border-box;
