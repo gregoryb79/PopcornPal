@@ -1,49 +1,83 @@
-import {getItems, getRatings} from "../model.js"
+import {getItems, getRatings, getWatchlist, addToWatchlist,
+        removeFromWatchlist} from "../model.js"
 
-export function index(itemsList : HTMLElement, searchForm : HTMLFormElement){
+export async function index(itemsList : HTMLElement, searchForm : HTMLFormElement,
+    sortingOptions : HTMLSelectElement, logoutIcon : HTMLElement
+){
 
     console.log("hello PopcornPal");
 
-    renderItemsCards("");
+    const watchlist = await getWatchlist();
+    let sort = "Newest";
 
-    itemsList.addEventListener("click", (event) => {
+    renderItemsCards("",sort);
+
+    itemsList.addEventListener("click", async (event) => {
         const target = event.target as HTMLElement;
 
         const listItem = target.closest("li.itemCard");
         if (!listItem) return; 
     
         const itemId = listItem.getAttribute("data-id");
-    
+        
+        if (!itemId) return;
         if (target.matches('input[type="checkbox"]')) {
             const checkbox = target as HTMLInputElement;
             console.log(`Checkbox clicked in item ${itemId}, checked: ${checkbox.checked}`);            
-        }
-        
-        else if (target.tagName === "IMG") {
+            if (checkbox.checked) {
+                await addToWatchlist(itemId);
+            } else {
+                const wlItemId = (watchlist?.find(wlItem => wlItem.itemId === itemId))?._id;
+                if (!wlItemId) return;
+                await removeFromWatchlist(wlItemId);
+            }
+        } else if (target.tagName === "IMG") {
             console.log(`Image clicked in item ${itemId}`); 
             window.location.replace(`/item#${itemId}`);
-
         }
         
     });
 
+    searchForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(searchForm);
+        const query = formData.get("search") as string;        
+        console.log(`Searching for: ${query}`);
+        await renderItemsCards(`?search=${query}`, sort);        
+    });
 
-   async function renderItemsCards(query : string) {
+    sortingOptions.addEventListener("change", async (event) => {
+        sort = (event.target as HTMLSelectElement).value;
+        console.log(`Sorting by: ${sort}`);
+        await renderItemsCards("", sort);
+    });
+   
+   async function renderItemsCards(query : string, sort: string = "Newest"){ 
     try{
         const items = await getItems(query);
+        if (sort === "Oldest") {
+            items.sort((a, b) => new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime());
+        }  
         console.log(items);
 
         if(items.length > 0) {
             const ratings = await getRatings(items);
+            if (sort === "Top Rated") {
+                items.sort((a, b) => {
+                    const ratingA = ratings.get(a._id) ?? 0; 
+                    const ratingB = ratings.get(b._id) ?? 0; 
+                    return ratingB - ratingA; 
+                });               
+            }
             itemsList.innerHTML = items
                 .map((item) => `                                
                                 <li class="itemCard" data-id="${item._id}">
                                     <img src=${item.posterUrl} alt="poster image"></img>
                                     <h4>${item.title}</h4>
-                                    <p class="releaseYear">${item.releaseDate}</p>
+                                    <p class="releaseYear">${(new Date(item.releaseDate)).getFullYear()}</p>
                                     <section class="raitingANDlist">
                                         <p class="raiting">${ratings.get(item._id)?.toFixed(1) ?? "0.0"}</p>
-                                        <input type="checkbox" class="checkbox">                                                           
+                                        <input type="checkbox" class="checkbox" ${(watchlist ?? []).some(wlItem => wlItem.itemId === item._id) ? "checked" : ""}>                                                           
                                     </section>               
                                 </li>
                                 `)

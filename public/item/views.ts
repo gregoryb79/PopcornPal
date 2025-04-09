@@ -9,14 +9,21 @@ export async function index(
     
     const itemId = window.location.hash.substring(1); 
     const item = await getItem(itemId);  
+
     const usersRating = await getRatingbyID (itemId);
     console.log(`usersRating = ${usersRating}`);
+
     const reviews: returnedReview[] = await getReviewsbyID (itemId); 
     console.log(`reviews = ${reviews}`);
+
     const myReview = await getReviewbyUserID (itemId);
+    console.log(`myReview = ${myReview?.content}`);
+
     const myRaiting = await getRatingbyUserID (itemId);
     console.log(`myRaiting = ${myRaiting?.score}`);    
-    const myWatchlistStatus = await getWatchlistStatus(itemId);    
+
+    const myWatchlistStatus = await getWatchlistStatus(itemId); 
+    console.log(`myWatchlistStatus = ${myWatchlistStatus?.status}`);   
 
     if(item){
         renderItemOnPage(item,usersRating);
@@ -76,7 +83,7 @@ export async function index(
                 ${item.title}
             </h2>            
             <p>
-                ${item.releaseDate} - ${item.genres[0]} ${item.runtime ? ` - ${item.runtime} min.` : ""}
+                ${(new Date(item.releaseDate)).getFullYear()} - ${item.genres[0]} ${item.runtime ? ` - ${item.runtime} min.` : ""}
             </p>
         `;
 
