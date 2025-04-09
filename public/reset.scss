@@ -40,6 +40,7 @@ $bp-mobile: 27rem;
 html {
     font-size: var(--defaultFont);
     line-height: 1.5;
+    background-color: var(--margin-color);
 }
 
 input, textarea, button {

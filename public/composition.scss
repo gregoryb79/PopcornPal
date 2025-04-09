@@ -2,7 +2,8 @@ body {
     font-family: system-ui;
     width: var(--bodyWidth);
     margin-inline: auto;
-    border: 1px solid grey;    
+    border: 1px solid grey;  
+    background-color: var(--background_color);  
 }
 
 ul, ol, menu, li, nav {
