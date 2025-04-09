@@ -9,7 +9,7 @@ const testUserId = new mongoose.Types.ObjectId();
 
 const app = express();
 app.use(express.json());
-app.use((req, res, next) => {
+app.use((req, _, next) => {
     req.signedCookies = { userId: testUserId.toString() };
     next();
   });
@@ -91,6 +91,15 @@ describe("Items API", () => {
     const res = await request(app).get(`/api/reviews?search=01`);
     expect(res.statusCode).toBe(200);
     expect(res.body[0].itemTitle).toBe("Test title 01");
+  });
+
+  it("should search reviews by userId", async () => {
+    
+    await Review.create(validBody1);
+
+    const res = await request(app).get(`/api/reviews`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body[0].content).toBe("item review test text 01");
   });
 
   it("should get item by ID", async () => {

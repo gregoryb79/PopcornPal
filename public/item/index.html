@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
-    <title>PopcornPal</title>
+    <title>PopcornPal|Item</title>
     <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -15,38 +15,24 @@
             <h2>
                 PopcornPal 🍿 
             </h2>           
-            <div id="userIcon" class="icon">
-                L
-            </div>
+            <img src="../logout.svg" alt="logout icon" class="icon" id="logoutIcon">            
         </section>
         <nav class="navMenu u-margin-right-8">
-            <li><a href="/">Home</a></li>
-            <li><a href="/">My Watchlist</a></li>
-            <li><a href="/">My Ratings</a></li>
-            <li><a href="/">My Reviews</a></li>
-        </nav>                     
+            <li><a href="/home">Home</a></li>
+            <li><a href="/watchlist">My Watchlist</a></li>
+            <li><a href="/raitings">My Ratings</a></li>
+            <li><a href="/reviews">My Reviews</a></li>
+        </nav>                      
     </header>
 
     <main class="u-margin-bottom-16">
         <section class="itemTitle u-margin-right-8 u-marginLeft-8" id="itemTitle">
-            <!-- <h2>
-                The Shawshank Redemption
-            </h2>            
-            <p>
-                1994 - Drama - 142min.
-            </p> -->
+            <!-- item main details are populated here-->
         </section>       
        
         <section class="itemSection" id="itemSection">               
             <div class="itemDetails" id="itemDetails">                                 
-                <!-- <img src="https://media.themoviedb.org/t/p/w300_and_h450_bestv2/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg" alt="item poster image">         
-                <section class="itemDescription">
-                    <h4>Director: Frank Darabont</h4>                    
-                    <h4>Cast: Tim Robbins, Morgan Freeman</h4> 
-                    <h4>Description:</h4>
-                    <p>Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.</p>                                   
-                    <h4>Users rating: 5.0</h4>                    
-                </section>                 -->
+                <!-- item details populated here-->
             </div>
             <section class="selectorsSection">
                 <div>
@@ -73,32 +59,33 @@
             </section>                  
         </section>
 
+        <div id="loadingSpinner" class="loading-spinner"></div>
+
         <section class="reviewsSection" id="reviewsSection">                        
             <h2>Reviews</h2>
             <form class="reviewForm" name="reviewForm" id="reviewForm">
-                <textarea id="reviewText" name="reviewText" rows="2" placeholder="Input text..."></textarea> 
+                <textarea id="reviewText" name="reviewText" rows="2" placeholder="Write your review here..."></textarea> 
                 <button type="submit">Submit</button>
             </form>
             <ul id="reviewsList" class="reviewsList"> 
-                <!--<li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>              
-                <li class="reviewCard">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, ratione. Autem iste nesciunt maxime veniam ducimus, odit nemo dolor velit?</li>-->
+                <!-- Reviews will be populated here -->
             </ul>
         </section>
     </main>
 
     <script type="module">
         import { index } from "./views.js";
+        import { logOut } from "../logout.js";
 
         index(document.getElementById("itemTitle"),
-            document.getElementById("itemDetails"),
-            document.getElementById("reviewsSection"),
+            document.getElementById("itemDetails"),            
             document.getElementById("reviewsList"),
             document.getElementById("myRaiting"),
             document.getElementById("wlOptions"),
-            document.forms["reviewForm"]);
+            document.forms["reviewForm"],
+            document.getElementById("loadingSpinner"));
+
+        logOut(document.getElementById("logoutIcon"));
 
     </script>
 </body>

@@ -32,7 +32,7 @@
     <main class="u-margin-bottom-16">
         <section class="mainSubHeader u-margin-right-8 u-marginLeft-8">
             <h2>
-                What to watch
+                My Watchlist
             </h2>
             <select id="sortingOptions" name="sortingOptions" class="sortingSelector">
                 <option value="Newest">Newest</option>
@@ -40,7 +40,7 @@
                 <option value="Top Rated">Top Rated</option>
             </select>
         </section>
-       
+        
         <div id="loadingSpinner" class="loading-spinner"></div>
 
         <ul id="itemsList" class="itemsList">
@@ -53,7 +53,7 @@
         import { logOut } from "../logout.js";
 
         index(document.getElementById("itemsList"),document.forms["searchForm"],
-            document.getElementById("sortingOptions"),document.getElementById("loadingSpinner"));
+            document.getElementById("sortingOptions"), document.getElementById("loadingSpinner"));
 
         logOut(document.getElementById("logoutIcon"));
 

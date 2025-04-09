@@ -20,6 +20,7 @@ export function register(registerForm : HTMLFormElement){
             }                     
         }catch(error){
             console.error(error);
+            alert(error);
         }     
         formElement
             .querySelectorAll("input, button")

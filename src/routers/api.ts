@@ -1,6 +1,5 @@
 import express from "express";
 import { router as itemsRouter } from "./items.router";
-import { router as episodesRouter } from "./episodes.router";
 import { router as ratingsRouter } from "./ratings.router";
 import { router as reviewsRouter } from "./review.router";
 import { router as watchlistRouter } from "./watchlist.router";
@@ -12,7 +11,6 @@ export const router = express.Router();
 // });
 
 router.use("/items", itemsRouter);
-router.use("/episodes", episodesRouter);
 router.use("/ratings", ratingsRouter);
 router.use("/reviews", reviewsRouter);
 router.use("/watchlist", watchlistRouter);

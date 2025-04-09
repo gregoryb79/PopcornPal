@@ -22,6 +22,7 @@
     --itemTextFont: 0.75rem;
     --defaultFont: 1rem;
     --largeFont: 1.5rem;
+    --bodyWidth: min(50rem, 100% - 2rem);
 
 }
 
@@ -40,7 +41,7 @@ html {
 
 body {
     font-family: system-ui;
-    width: min(50rem, 100% - 2rem);
+    width: var(--bodyWidth);
     margin-inline: auto;
     border: 1px solid grey;
     // min-height: 90vh;
@@ -90,6 +91,11 @@ main {
 .u-margin-bottom-16{
     margin-bottom: 1rem;
 }
+
+.u-margin-bottom-8{
+    margin-bottom: 0.5rem;
+}
+
 .u-marginLeft-8{
     margin-left: 0.5rem;
 }
@@ -100,6 +106,27 @@ main {
 
 .u-border-radius-8{
     border-radius: 0.5rem;
+}
+
+.u-clickable{
+    cursor: pointer;
+}
+
+.u-bold{
+    font-weight: bold;
+}
+
+.u-secondaryColor{
+    color: var(--text_color_secondary);
+}
+.u-primaryColor{
+    color: var(--text_color_main);
+}
+.u-itemTextFont{
+    font-size: var(--itemTextFont);
+}
+.u-largeFont{
+    font-size: var(--largeFont);
 }
 
 .mainSubHeader{
@@ -122,8 +149,8 @@ main {
 .icon{
     width: 3rem;
     height: 3rem;
-    border-radius: 50%;
-    background-color: lightgrey;
+    // border-radius: 50%;
+    // background-color: lightgrey;
     text-align: center;
     font-size: 2rem;
     cursor: pointer;
@@ -294,5 +321,55 @@ main {
     }
 }
 
+.popUpForm{
+    top: 20vh;
+    position: absolute; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;    
+    align-items: center;
+    width:calc(var(--bodyWidth) - 5rem);
+    textarea{
+        width: 95%;
+        margin: 0.5rem;
+    }   
+      
+}
+.showForm{
 
+    visibility: hidden;
+    opacity: 0;
+    background-color: seashell;
+    z-index: 999;    
+    box-shadow: 10px 10px 15px var(--shadow-color,grey);
+    border-radius: 0.5rem;       
+    
+    &.active {
+        opacity: 1;
+        visibility: visible; 
+    }
+}
 
+.loading-spinner {
+    display: none; 
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1); 
+    border-top: 5px solid #3498db; 
+    border-radius: 50%; 
+    animation: spin 1s linear infinite; 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}

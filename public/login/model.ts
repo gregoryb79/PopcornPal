@@ -17,8 +17,9 @@ export async function doLogIn(email : string, password: string): Promise<void> {
           }
       });
       if (!res.ok) {
-          const message = await res.text();             
-          throw new Error(`Failed to log in. Status: ${res.status}. Message: ${message}`);
+          const message = await res.text(); 
+          console.log(`Failed to log in. Status: ${res.status}. Message: ${message}`);
+          throw new Error(message);
       }
       console.log(`loged in with: ${email} - ${password}`);
       

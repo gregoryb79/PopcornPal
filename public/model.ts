@@ -41,8 +41,22 @@ export type Review = {
     itemId: string; 
     itemTitle: string;
     content: string;    
-    createdAt?: string; 
-    updatedAt?: string; 
+    createdAt: string; 
+    updatedAt: string; 
+}
+
+export async function doLogout() {
+    console.log("doLogout starts");    
+    try {
+        const res = await fetch("/logout");
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to logout. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error logging out:", error);
+        throw error;        
+    } 
 }
 
 export type returnedItems = Omit<Item,"type"|"description"|"genres"|"cast"|"director"
@@ -62,6 +76,25 @@ export async function getItems(query : string) : Promise<returnedItems[]> {
         throw error; 
     }    
 }
+
+//filters items returned from the server (all movies and series that fit to query) and leaves only the 
+// items that are on watchlist
+export async function getWatchListItems(watchlist:returnedWatchlist[],query : string) {
+    console.log(`getWatchListItems with query = ${query} starts`);
+    try {        
+        const res = await fetch(`/api/items${query}`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch notes. Status: ${res.status}. Message: ${message}`);
+        }       
+        const items: returnedItems[] =  await res.json();
+        const wlItems = watchlist.map(wlItem => wlItem.itemId);        
+        return items.filter(item => wlItems.includes(item._id)).sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        throw error; 
+    }
+}   
 
 export type returnedRating = Omit<Rating,"userId"|"createdAt"|"updatedAt">
 export async function getRatingbyID(itemID: string) : Promise<number>{
@@ -108,6 +141,22 @@ export async function getRatings(
   return ratingMap;
 }
 
+export async function getRatingsbyUser() : Promise<returnedRating[]>{
+    console.log(`get all ratings by user starts`);
+    try {
+        const res = await fetch(`/api/ratings`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch raitings for user. Status: ${res.status}. Message: ${message}`);
+        }       
+        const ratings : returnedRating [] =  await res.json();        
+        return ratings;        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return []        
+    } 
+}
+
 export async function getItem(itemId:string) {
   console.log(`getItem with itemId = ${itemId} starts`);
   try {        
@@ -124,7 +173,7 @@ export async function getItem(itemId:string) {
   }     
 }
 
-export type returnedReview = Omit<Review,"userId"|"createdAt"|"updatedAt">
+export type returnedReview = Omit<Review,"userId"|"createdAt">
 export async function getReviewsbyID(itemID: string) : Promise<returnedReview[]>{
     console.log(`getReviewsbyID with itemID = ${itemID} starts`);
     try {
@@ -140,97 +189,19 @@ export async function getReviewsbyID(itemID: string) : Promise<returnedReview[]>
         return [];        
     } 
 }
-
-export async function getRatingbyUserID(itemID: string) : Promise<returnedRating|null>{
-    console.log(`getRatingbyUserID with itemID = ${itemID} starts`);
+export async function getReviewsbyUser() : Promise<returnedReview[]>{
+    console.log(`get all reviews by user starts`);
     try {
-        const res = await fetch(`/api/ratings`);
+        const res = await fetch(`/api/reviews`);
         if (!res.ok) {
             const message = await res.text();             
-            throw new Error(`Failed to fetch raitings for ${itemID}. Status: ${res.status}. Message: ${message}`);
+            throw new Error(`Failed to fetch reviews for user. Status: ${res.status}. Message: ${message}`);
         }       
-        const ratings : returnedRating [] =  await res.json();
-        if (ratings.length > 0) {
-            return ratings.find(rating => rating.itemId === itemID) || null;
-        }else{
-            return null;
-        }        
+        const reviews : returnedReview [] =  await res.json();        
+        return reviews;        
     }catch (error) {
         console.error("Error fetching items:", error);
-        return null;        
-    } 
-}
-
-export type returnedWatchlist = Omit<Watchlist,"userId"|"itemId"|"createdAt"|"updatedAt">
-export async function getWatchlistStatus(itemID: string) : Promise<returnedWatchlist|null>{
-    console.log(`getWatchlistStatus with itemID = ${itemID} starts`);
-    try {
-        const res = await fetch(`/api/watchlist/?search=${itemID}`);
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to fetch watchlist status for ${itemID}. Status: ${res.status}. Message: ${message}`);
-        }       
-        const wlItem:returnedWatchlist[] = await res.json();
-        console.log(`wlItem = ${JSON.stringify(wlItem)}`);
-        if (wlItem.length > 0) {
-            console.log(`returning wlItem = ${wlItem[0].status}`);
-            return wlItem[0];
-        }else{
-            return null;
-        }        
-    }catch (error) {
-        console.error("Error fetching items:", error);
-        return null;        
-    } 
-}
-
-export async function setRating(item: returnedItems, rating: string, ratingId : string = "newRating") : Promise<void>{
-    console.log(`setRating with itemID = ${item._id} and rating = ${rating} starts`);
-
-    const body = {
-        itemId: item._id,
-        itemTitle: item.title,
-        score: rating,};
-
-    try {
-        const res = await fetch(`/api/ratings/${ratingId}`, {
-            method: "put",
-            body: JSON.stringify(body),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to set raitings for ${item._id}. Status: ${res.status}. Message: ${message}`);
-        }        
-    }catch (error) {
-        console.error("Error setting raitings:", error);        
-    } 
-}
-
-export async function setwlStatus(item: returnedItems, wlStatus: string, wlId : string = "newWL") : Promise<void>{
-    console.log(`setwlStatus with itemID = ${item._id} and wlStatus = ${wlStatus} starts`);
-
-    const body = {
-        itemId: item._id,
-        itemTitle: item.title,
-        status: wlStatus,};
-
-    try {
-        const res = await fetch(`/api/watchlist/${wlId}`, {
-            method: "put",
-            body: JSON.stringify(body),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to set watchlist status for ${item._id}. Status: ${res.status}. Message: ${message}`);
-        }        
-    }catch (error) {
-        console.error("Error setting watchlist status:", error);        
+        return [];        
     } 
 }
 
@@ -243,9 +214,17 @@ export async function getReviewbyUserID(itemId : string) : Promise<returnedRevie
             throw new Error(`Failed to fetch reviews for ${itemId}. Status: ${res.status}. Message: ${message}`);
         }       
         const reviews : returnedReview [] =  await res.json();
+        console.log(`reviews = ${JSON.stringify(reviews)}`);
         if (reviews.length > 0) {
-            return reviews.find(review => review.itemId === itemId) || null;
+            const review = reviews.find(review => review.itemId === itemId) || null;
+            console.log(`review = ${JSON.stringify(review)}`);
+            if (review) {
+                return review;
+            } else{
+                return null;
+            }                        
         }else{
+            console.log(`No User's reviews found for itemId: ${itemId} returning null`);
             return null;
         }        
     }catch (error) {
@@ -278,3 +257,191 @@ export async function setReview(item: returnedItems, review: string, reviewId : 
         console.error("Error setting reviews:", error);        
     } 
 }
+
+export async function updateReview(review: returnedReview) : Promise<void>{
+    console.log(`updateReview with reviewID = ${review._id} and review = ${review.content} starts`);
+
+    const body = {
+        itemId: review.itemId,
+        itemTitle: review.itemTitle,
+        content: review.content,};
+
+    try {
+        const res = await fetch(`/api/reviews/${review._id}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set reviews for ${review._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting reviews:", error);        
+    } 
+}
+
+export async function getRatingbyUserID(itemID: string) : Promise<returnedRating|null>{
+    console.log(`getRatingbyUserID with itemID = ${itemID} starts`);
+    try {
+        const res = await fetch(`/api/ratings`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch raitings for ${itemID}. Status: ${res.status}. Message: ${message}`);
+        }       
+        const ratings : returnedRating [] =  await res.json();
+        if (ratings.length > 0) {
+            return ratings.find(rating => rating.itemId === itemID) || null;
+        }else{
+            return null;
+        }        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return null;        
+    } 
+}
+
+export type returnedWatchlist = Omit<Watchlist,"userId"|"createdAt"|"updatedAt">
+export async function getWatchlistStatus(itemID: string) : Promise<returnedWatchlist|null>{
+    console.log(`getWatchlistStatus with itemID = ${itemID} starts`);
+    try {
+        const res = await fetch(`/api/watchlist/?search=${itemID}`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch watchlist status for ${itemID}. Status: ${res.status}. Message: ${message}`);
+        }       
+        const wlItem:returnedWatchlist[] = await res.json();
+        console.log(`wlItem = ${JSON.stringify(wlItem)}`);
+        if (wlItem.length > 0) {
+            console.log(`returning wlItem = ${wlItem[0].status}`);
+            return wlItem[0];
+        }else{
+            return null;
+        }        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return null;        
+    } 
+}
+
+export async function getWatchlist() : Promise<returnedWatchlist[]|null>{
+    console.log(`get user Watchlist starts`);
+    try {
+        const res = await fetch(`/api/watchlist`);
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to fetch watchlist. Status: ${res.status}. Message: ${message}`);
+        }       
+        const watchlist : returnedWatchlist [] =  await res.json();
+        if (watchlist.length > 0) {
+            return watchlist;            
+        }else{
+            return null;
+        }        
+    }catch (error) {
+        console.error("Error fetching items:", error);
+        return null;        
+    } 
+}
+
+export async function addToWatchlist(itemId: string) : Promise<void>{
+    console.log(`addToWatchlist with itemId = ${itemId} starts`); 
+    try{
+        const item = await getItem(itemId); 
+        const body = {
+            itemId: item._id,
+            itemTitle: item.title,
+            status: "Plan to Watch",
+        };
+        const res = await fetch(`/api/watchlist/newWL`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to add item to watchlist. Status: ${res.status}. Message: ${message}`);
+        }
+        console.log(`Item ${itemId} added to watchlist`);
+    }catch(error){
+        console.error("Error adding item to watchlist:", error);
+        throw error;        
+    }    
+}
+
+export async function removeFromWatchlist(wlId: string) : Promise<void>{
+    console.log(`removeFromWatchlist with wlId = ${wlId} starts`); 
+    try{
+        const res = await fetch(`/api/watchlist/${wlId}`, {
+            method: "delete",
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to remove item from watchlist. Status: ${res.status}. Message: ${message}`);
+        }
+        console.log(`Item ${wlId} removed from watchlist`);
+    }catch(error){
+        console.error("Error removing item from watchlist:", error);
+        throw error;        
+    }
+}
+    
+    
+
+export async function setRating(item: returnedItems, rating: string, ratingId : string = "newRating") : Promise<void>{
+    console.log(`setRating with itemID = ${item._id} and rating = ${rating} starts`);
+
+    const body = {
+        itemId: item._id,
+        itemTitle: item.title,
+        score: rating,};
+
+    try {
+        const res = await fetch(`/api/ratings/${ratingId}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set raitings for ${item._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting raitings:", error);        
+    } 
+}
+
+export async function setwlStatus(item: returnedItems, wlStatus: string = "Plan to Watch", wlId : string = "newWL") : Promise<void>{
+    console.log(`setwlStatus with itemID = ${item._id} and wlStatus = ${wlStatus} starts`);
+
+    const body = {
+        itemId: item._id,
+        itemTitle: item.title,
+        status: wlStatus,};
+
+    try {
+        const res = await fetch(`/api/watchlist/${wlId}`, {
+            method: "put",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            const message = await res.text();             
+            throw new Error(`Failed to set watchlist status for ${item._id}. Status: ${res.status}. Message: ${message}`);
+        }        
+    }catch (error) {
+        console.error("Error setting watchlist status:", error);        
+    } 
+}
+

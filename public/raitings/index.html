@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
-    <title>PopcornPal</title>
+    <title>PopcornPal|My Raitings</title>
     <link rel="stylesheet" href="../styles.css" />
 </head>
 
@@ -14,11 +14,7 @@
         <section class="logoANDsearch u-margin-right-8 u-marginLeft-8">
             <h2>
                 PopcornPal 🍿 
-            </h2>
-            <form name="searchForm" class="searchForm">
-                <input type="search" name="search" placeholder="Search..." />
-                <button type="submit">Search</button>
-            </form> 
+            </h2>           
             <img src="../logout.svg" alt="logout icon" class="icon" id="logoutIcon">            
         </section>
         <nav class="navMenu u-margin-right-8">
@@ -32,28 +28,24 @@
     <main class="u-margin-bottom-16">
         <section class="mainSubHeader u-margin-right-8 u-marginLeft-8">
             <h2>
-                What to watch
-            </h2>
-            <select id="sortingOptions" name="sortingOptions" class="sortingSelector">
-                <option value="Newest">Newest</option>
-                <option value="Oldest">Oldest</option>
-                <option value="Top Rated">Top Rated</option>
-            </select>
+                My Raitings
+            </h2>            
         </section>
-       
+        
         <div id="loadingSpinner" class="loading-spinner"></div>
 
-        <ul id="itemsList" class="itemsList">
-            <!-- all the movies and series are populated here -->            
-        </ul>
+        <section class="reviewsSection" id="raitingsSection">            
+            <ul id="raitingsList" class="reviewsList"> 
+                <!-- Raitings will be populated here -->
+            </ul>
+        </section>
     </main>
 
     <script type="module">
         import { index } from "./views.js";
         import { logOut } from "../logout.js";
 
-        index(document.getElementById("itemsList"),document.forms["searchForm"],
-            document.getElementById("sortingOptions"),document.getElementById("loadingSpinner"));
+        index(document.getElementById("raitingsList"),document.getElementById("loadingSpinner"));;
 
         logOut(document.getElementById("logoutIcon"));
 

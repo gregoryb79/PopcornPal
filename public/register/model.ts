@@ -20,13 +20,13 @@ export async function doRegister(user: submittedUser): Promise<void> {
             }
         });
         if (!res.ok) {
-            const message = await res.text();             
-            throw new Error(`Failed to register. Status: ${res.status}. Message: ${message}`);
+            const message = await res.text(); 
+            console.log(`Failed to register. Status: ${res.status}. Message: ${message}`);
+            throw new Error(message);
         }
-        console.log(`Registered with: ${user.email} - ${user.password}`);
-        
+        console.log(`Registered with: ${user.email} - ${user.password}`);        
     }catch(error){
-        console.error(`Error logging in`, error);  
+        console.error(`Error registering, throwing error: ${error}`);  
         throw error;      
     }    
 }
