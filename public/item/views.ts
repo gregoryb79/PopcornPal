@@ -112,11 +112,14 @@ export async function index(
         
         if (myReview){
             console.log(`review already exists, updating it`);
-            await setReview(item, reviewText, myReview._id);            
+            await setReview(item, reviewText, myReview._id);  
+            alert("Review updated successfully!");          
         } else{
             console.log(`review does not exist, creating it`);  
             await setReview(item, reviewText);
+            myReview = await getReviewbyUserID (itemId);            
             reviewForm.querySelector('button[type="submit"]')!.textContent = "Update";
+            alert("Review created successfully!");
         }
     });
 
