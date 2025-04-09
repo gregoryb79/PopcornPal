@@ -6,26 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
     <title>PopcornPal|Item</title>
-    <link rel="stylesheet" href="../styles.css" />
+    
+    <link rel="stylesheet" href="../reset.css" />
+    <link rel="stylesheet" href="../composition.css" />
+    <link rel="stylesheet" href="../utilities.css" />
+    <link rel="stylesheet" href="../block.css" />
+    <link rel="stylesheet" href="../exceptions.css" />
 </head>
 
 <body class="u-border-radius-8">
-    <header class="u-margin-top-8">
+    <header class="u-margin-top-8" role="banner">
         <section class="logoANDsearch u-margin-right-8 u-marginLeft-8">
             <h2>
                 PopcornPal 🍿 
             </h2>           
             <img src="../logout.svg" alt="logout icon" class="icon" id="logoutIcon">            
         </section>
-        <nav class="navMenu u-margin-right-8">
-            <li><a href="/home">Home</a></li>
-            <li><a href="/watchlist">My Watchlist</a></li>
-            <li><a href="/raitings">My Ratings</a></li>
-            <li><a href="/reviews">My Reviews</a></li>
+        <nav class="navMenu u-margin-right-8" role="navigation" aria-label="Main navigation">
+                 <li><a href="/home">Home</a></li>
+                <li><a href="/watchlist">My Watchlist</a></li>
+                <li><a href="/raitings">My Ratings</a></li>
+                <li><a href="/reviews">My Reviews</a></li>            
         </nav>                      
     </header>
 
-    <main class="u-margin-bottom-16">
+    <main class="u-margin-bottom-16" role="main">
         <section class="itemTitle u-margin-right-8 u-marginLeft-8" id="itemTitle">
             <!-- item main details are populated here-->
         </section>       
@@ -37,7 +42,7 @@
             <section class="selectorsSection">
                 <div>
                     <label for="myRaiting">My Rating:</label>
-                    <select id="myRaiting" name="myRaiting" class="myRaitingSelector">
+                    <select id="myRaiting" name="myRaiting" class="myRaitingSelector" aria-label="Select your rating">
                         <option value="none">none</option>                        
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -48,7 +53,7 @@
                 </div>     
                 <div>
                     <label for="wlOptions">Watchlist Status:</label>
-                    <select id="wlOptions" name="wlOptions" class="wlOptionsSelector">
+                    <select id="wlOptions" name="wlOptions" class="wlOptionsSelector" aria-label="Select your watchlist status">
                         <option value="none">none</option>
                         <option value="Plan to Watch">Plan to Watch</option>
                         <option value="Watching">Watching</option>
@@ -59,7 +64,7 @@
             </section>                  
         </section>
 
-        <div id="loadingSpinner" class="loading-spinner"></div>
+        <div id="loadingSpinner" class="loading-spinner" aria-live="polite" aria-busy="true" hidden></div>
 
         <section class="reviewsSection" id="reviewsSection">                        
             <h2>Reviews</h2>

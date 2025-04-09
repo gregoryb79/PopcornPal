@@ -5,38 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
-    <title>PopcornPal|My Raitings</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <title>PopcornPal|My Ratings</title>
+    
+    <link rel="stylesheet" href="../reset.css" />
+    <link rel="stylesheet" href="../composition.css" />
+    <link rel="stylesheet" href="../utilities.css" />
+    <link rel="stylesheet" href="../block.css" />
+    <link rel="stylesheet" href="../exceptions.css" />
 </head>
 
 <body class="u-border-radius-8">
-    <header class="u-margin-top-8">
+    <header class="u-margin-top-8" role="banner">
         <section class="logoANDsearch u-margin-right-8 u-marginLeft-8">
             <h2>
                 PopcornPal 🍿 
             </h2>           
             <img src="../logout.svg" alt="logout icon" class="icon" id="logoutIcon">            
         </section>
-        <nav class="navMenu u-margin-right-8">
+        <nav class="navMenu u-margin-right-8" role="navigation" aria-label="Main navigation">            
             <li><a href="/home">Home</a></li>
             <li><a href="/watchlist">My Watchlist</a></li>
-            <li><a href="/raitings">My Ratings</a></li>
+            <li><a href="/raitings" aria-current="page">My Ratings</a></li>
             <li><a href="/reviews">My Reviews</a></li>
-        </nav>                      
+        </nav>                  
     </header>
 
-    <main class="u-margin-bottom-16">
+    <main class="u-margin-bottom-16" role="main">
         <section class="mainSubHeader u-margin-right-8 u-marginLeft-8">
             <h2>
-                My Raitings
+                My Ratings
             </h2>            
         </section>
         
-        <div id="loadingSpinner" class="loading-spinner"></div>
+        <div id="loadingSpinner" class="loading-spinner" aria-live="polite" aria-busy="true" hidden>
+            Loading...
+        </div>
 
         <section class="reviewsSection" id="raitingsSection">            
             <ul id="raitingsList" class="reviewsList"> 
-                <!-- Raitings will be populated here -->
+                <!-- Ratings will be populated here -->
             </ul>
         </section>
     </main>
@@ -45,7 +52,7 @@
         import { index } from "./views.js";
         import { logOut } from "../logout.js";
 
-        index(document.getElementById("raitingsList"),document.getElementById("loadingSpinner"));;
+        index(document.getElementById("raitingsList"), document.getElementById("loadingSpinner"));
 
         logOut(document.getElementById("logoutIcon"));
 

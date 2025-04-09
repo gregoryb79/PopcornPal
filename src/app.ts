@@ -89,7 +89,7 @@ app.post("/login", async (req, res) => {
     res.end();
 });
 
-app.get("/logout", async (req, res) => {
+app.get("/logout", async (_, res) => {
     res.clearCookie("userId", { httpOnly: true, signed: true });
     res.send("Logged out successfully.");
 });

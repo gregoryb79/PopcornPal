@@ -1,0 +1,58 @@
+
+.u-margin-top-16{
+    margin-top: 1rem;
+}
+.u-margin-top-8{
+    margin-top: 0.5rem;
+}
+.u-margin-bottom-16{
+    margin-bottom: 1rem;
+}
+
+.u-margin-bottom-8{
+    margin-bottom: 0.5rem;
+}
+
+.u-marginLeft-8{
+    margin-left: 0.5rem;
+}
+
+.u-margin-right-8{
+    margin-right: 0.5rem;
+}
+
+.u-border-radius-8{
+    border-radius: 0.5rem;
+}
+
+.u-clickable{
+    cursor: pointer;
+}
+
+.u-bold{
+    font-weight: bold;
+}
+
+.u-secondaryColor{
+    color: var(--text_color_secondary);
+}
+.u-primaryColor{
+    color: var(--text_color_main);
+}
+.u-itemTextFont{
+    font-size: var(--itemTextFont);
+}
+.u-largeFont{
+    font-size: var(--largeFont);
+}
+
+.visually-hidden{
+    position: absolute; 
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

@@ -5,43 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/x-icon">
-    <title>PopcornPal</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <title>PopcornPal|My Watchlist</title>
+    
+    <link rel="stylesheet" href="../reset.css" />
+    <link rel="stylesheet" href="../composition.css" />
+    <link rel="stylesheet" href="../utilities.css" />
+    <link rel="stylesheet" href="../block.css" />
+    <link rel="stylesheet" href="../exceptions.css" />
 </head>
 
 <body class="u-border-radius-8">
-    <header class="u-margin-top-8">
+    <header class="u-margin-top-8" role="banner">
         <section class="logoANDsearch u-margin-right-8 u-marginLeft-8">
             <h2>
                 PopcornPal 🍿 
             </h2>
-            <form name="searchForm" class="searchForm">
-                <input type="search" name="search" placeholder="Search..." />
+            <form name="searchForm" class="searchForm" role="search">
+                <label for="searchInput" class="visually-hidden">Search for movies or series</label>
+                <input type="search" id="searchInput" name="search" placeholder="Search..." aria-label="Search for movies or series" />
                 <button type="submit">Search</button>
             </form> 
             <img src="../logout.svg" alt="logout icon" class="icon" id="logoutIcon">            
         </section>
-        <nav class="navMenu u-margin-right-8">
+        <nav class="navMenu u-margin-right-8" role="navigation" aria-label="Main navigation">           
             <li><a href="/home">Home</a></li>
-            <li><a href="/watchlist">My Watchlist</a></li>
+            <li><a href="/watchlist" aria-current="page">My Watchlist</a></li>
             <li><a href="/raitings">My Ratings</a></li>
-            <li><a href="/reviews">My Reviews</a></li>
+            <li><a href="/reviews">My Reviews</a></li>            
         </nav>                      
     </header>
 
-    <main class="u-margin-bottom-16">
+    <main class="u-margin-bottom-16" role="main">
         <section class="mainSubHeader u-margin-right-8 u-marginLeft-8">
             <h2>
                 My Watchlist
             </h2>
-            <select id="sortingOptions" name="sortingOptions" class="sortingSelector">
+            <label for="sortingOptions" class="visually-hidden">Sort movies and series</label>
+            <select id="sortingOptions" name="sortingOptions" class="sortingSelector" aria-label="Sort movies and series">
                 <option value="Newest">Newest</option>
                 <option value="Oldest">Oldest</option>
                 <option value="Top Rated">Top Rated</option>
             </select>
         </section>
         
-        <div id="loadingSpinner" class="loading-spinner"></div>
+        <div id="loadingSpinner" class="loading-spinner" aria-live="polite" aria-busy="true" hidden></div>
 
         <ul id="itemsList" class="itemsList">
             <!-- all the movies and series are populated here -->            
@@ -52,7 +59,7 @@
         import { index } from "./views.js";
         import { logOut } from "../logout.js";
 
-        index(document.getElementById("itemsList"),document.forms["searchForm"],
+        index(document.getElementById("itemsList"), document.forms["searchForm"],
             document.getElementById("sortingOptions"), document.getElementById("loadingSpinner"));
 
         logOut(document.getElementById("logoutIcon"));
