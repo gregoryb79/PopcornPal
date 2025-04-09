@@ -20,6 +20,7 @@ export function login(loginForm : HTMLFormElement){
             }                     
         }catch(error){
             console.error(error);
+            alert(error);
         }     
         formElement
             .querySelectorAll("input, button")
